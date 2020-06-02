@@ -65,7 +65,7 @@ attribute 'ghc-lib-parser_8_10_1_20200412' missing, at pkgs/development/haskell-
 
 This `nix-env` command is the take away from this blog post:
 
-`nix-env --query --available --out-path --file ./. --show-trace`.
+`nix-env --query --available --out-path --file ./. --show-trace`
 
 I'm not sure why the `--out-path` flag is needed, but if you don't add it then
 you don't get this error.
