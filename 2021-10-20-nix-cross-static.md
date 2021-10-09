@@ -6,14 +6,14 @@ draft: false
 ------------------------------------------------------
 
 I was having a problem at work with an ARM64 Linux edge device.  I have an
-ARM64 binary that is compiled for the edge device, and I wanted to look at
-which dynamic libraries it is linked to with the `readelf` program.
-Unfortunately, `readelf` is not installed on the device.  I was unable to
-figure out how to use the device's package manager.
+ARM64 binary on the  edge device, and I wanted to look at which dynamic
+libraries it is linked to with the `readelf` program.  Unfortunately, `readelf`
+is not installed on the device.  I was unable to figure out how to use the
+device's package manager.
 
-I was able to get a `readelf` binary that I could use on the device by
-cross-compiling and statically linking one from Nixpkgs.  This post
-explains how to easily cross-compile and statically link packages
+I was able to build a `readelf` binary that I could use on the device by
+cross-compiling and statically-linking one from Nixpkgs.  This post
+explains how to easily cross-compile and statically-link packages
 from Nixpkgs.
 
 ## Nix and Nixpkgs
@@ -27,7 +27,7 @@ package sets contain all the packages in the main package set, but compiled in
 different ways.
 
 The following sections describe different ways of compiling packages.
-All of the following code is run on a NixOS on x86-64 Linux machine[^1].
+All of the following code is run on a NixOS x86-64 Linux machine[^1].
 The Nixpkgs is channel is at commit
 [`63ee5cd9`](https://github.com/NixOS/nixpkgs/commit/63ee5cd99a2e193d5e4c879feb9683ddec23fa03).
 
@@ -40,6 +40,7 @@ from the main package set:
 
 ```console
 $ nix-build '<nixpkgs>' -A binutils-unwrapped
+...
 $ file ./result/bin/readelf
 ./result/bin/readelf: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /nix/store/gk42f59363p82rg2wv2mfy71jn5w4q4c-glibc-2.32-48/lib/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, not stripped
 ```
@@ -53,6 +54,9 @@ $ readelf --program-headers ./result/bin/readelf | grep interpreter
 [Requesting program interpreter: /nix/store/gk42f59363p82rg2wv2mfy71jn5w4q4c-glibc-2.32-48/lib/ld-linux-x86-64.so.2]
 ```
 
+(Hopefully it is not too confusing that I am using `readelf` installed on my
+system to inspect the `./result/bin/readelf` binary I just built.)
+
 ### Natively-compiled, statically-linked for x86-64 Linux
 
 The following is how you build a statically-compiled `readelf` binary for an
@@ -62,12 +66,13 @@ set:
 
 ```console
 $ nix-build '<nixpkgs>' -A pkgsStatic.binutils-unwrapped
+...
 $ file ./result/bin/readelf
 ./result/bin/readelf: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
 ```
 
 This `readelf` binary should mostly work if you copy it to any other x86-64
-Linux system.  This is a convenient way to build packages with Nix, but
+Linux system.  This is a convenient way to build packages with Nix, and
 have them work on any Linux system.
 
 ### Cross-compiled, dynamically-linked for ARM64 Linux
@@ -80,6 +85,7 @@ set:
 
 ```console
 $ nix-build '<nixpkgs>' -A pkgsCross.aarch64-multiplatform.binutils-unwrapped
+...
 $ file ./result/bin/readelf
 ./result/bin/readelf: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /nix/store/973yqp2iwrsxi2fn2haas5q3lz091xbi-glibc-aarch64-unknown-linux-gnu-2.32-48/lib/ld-linux-aarch64.so.1, for GNU/Linux 2.6.32, not stripped
 ```
@@ -101,6 +107,7 @@ a cross-compiled statically-linked `readelf` binary.  This composes
 
 ```console
 $ nix-build '<nixpkgs>' -A pkgsCross.aarch64-multiplatform.pkgsStatic.binutils-unwrapped
+...
 $ file ./result/bin/readelf
 ./result/bin/readelf: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), statically linked, not stripped
 ```
