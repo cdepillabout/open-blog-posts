@@ -28,7 +28,7 @@ different ways.
 
 The following sections describe different ways of compiling packages.
 All of the following code is run on a NixOS x86-64 Linux machine[^1].
-The Nixpkgs is channel is at commit
+The Nixpkgs channel I use below is at commit
 [`63ee5cd9`](https://github.com/NixOS/nixpkgs/commit/63ee5cd99a2e193d5e4c879feb9683ddec23fa03).
 
 ### Natively-compiled, dynamically-linked for x86-64 Linux
@@ -59,7 +59,7 @@ system to inspect the `./result/bin/readelf` binary I just built.)
 
 ### Natively-compiled, statically-linked for x86-64 Linux
 
-The following is how you build a statically-compiled `readelf` binary for an
+The following is how you build a statically-linked `readelf` binary for an
 x86-64 Linux.  Note that I'm getting `binutils-unwrapped` from the `pkgsStatic`
 sub package set.  All the binaries are statically linked in this sub package
 set:
@@ -101,9 +101,9 @@ $ readelf --program-headers ./result/bin/readelf | grep interpreter
 
 ### Cross-compiled, statically-linked for ARM64 Linux
 
-The neat thing is that these sub package sets compose, so this is how you build
-a cross-compiled statically-linked `readelf` binary.  This composes
-`pkgsCross.aarch64-multiplatform` with `pkgsStatic`:
+The neat thing is that these sub package sets compose, so the following is how
+you build a cross-compiled, statically-linked `readelf` binary.  This composes
+the `pkgsCross.aarch64-multiplatform` and `pkgsStatic` sub package sets:
 
 ```console
 $ nix-build '<nixpkgs>' -A pkgsCross.aarch64-multiplatform.pkgsStatic.binutils-unwrapped
@@ -112,8 +112,8 @@ $ file ./result/bin/readelf
 ./result/bin/readelf: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), statically linked, not stripped
 ```
 
-It should be possible to just copy this `readelf` binary to an ARM64 Linux
-device and use it like normal.
+It is possible to copy this `readelf` binary to an ARM64 Linux device and
+use it like normal.
 
 ## Where to find more information
 
