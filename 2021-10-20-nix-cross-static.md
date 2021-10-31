@@ -1,7 +1,7 @@
 ------------------------------------------------------
 title: Cross-compiling and Static-linking with Nix
 summary: Easily cross-compile and static-link binaries using Nix
-tags: nix
+tags: nixos
 draft: false
 ------------------------------------------------------
 
