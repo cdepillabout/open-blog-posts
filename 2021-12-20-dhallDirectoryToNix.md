@@ -76,7 +76,8 @@ Implementing `dhallDirectoryToNix` happened in a few stages:
 
 The following sections talk about each of these changes.
 
-### Adding flag to `dhall-nixpkgs`
+### `dhall-to-nix` and `dhall-to-nixpkgs`
+
 
 Dhall contains two binaries related to using Dhall with Nix:
 [`dhall-to-nix`](https://hackage.haskell.org/package/dhall-nix) (from the
@@ -87,3 +88,9 @@ Dhall contains two binaries related to using Dhall with Nix:
 - `dhall-to-nix`
 
     This binary allows you to read in a 
+
+### Adding flag to `dhall-nixpkgs`
+
+### Adding `buildDhallUrl` to Nixpkgs
+
+### Adding `dhallDirectoryToNix` to Nixpkgs
