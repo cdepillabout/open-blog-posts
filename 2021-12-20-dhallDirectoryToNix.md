@@ -91,6 +91,14 @@ Dhall contains two binaries related to using Dhall with Nix:
 
 ### Adding flag to `dhall-nixpkgs`
 
+https://github.com/dhall-lang/dhall-haskell/pull/2304
+https://github.com/dhall-lang/dhall-haskell/pull/2318
+https://github.com/dhall-lang/dhall-haskell/pull/2326
+
 ### Adding `buildDhallUrl` to Nixpkgs
 
+https://github.com/NixOS/nixpkgs/pull/142825
+
 ### Adding `dhallDirectoryToNix` to Nixpkgs
+
+https://github.com/NixOS/nixpkgs/pull/144076
