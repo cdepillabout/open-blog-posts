@@ -251,6 +251,7 @@ section explains this.
 
 ### Adding `dhallDirectoryToNix` to Nixpkgs
 
+TODO: Write this section:
 https://github.com/NixOS/nixpkgs/pull/144076
 
 ## Conclusion
