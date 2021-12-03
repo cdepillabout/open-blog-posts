@@ -96,7 +96,7 @@ Dhall contains two binaries related to using Dhall with Nix:
     2
     ```
 
-    There are two problems with `dhallToNix`:
+    There are two problems with `dhallToNix`[^3]:
 
     1.  It doesn't handle things like imports.  Trying to do a remote import in
         `dhallToNix` gives you an error saying that remote imports are not
@@ -130,20 +130,21 @@ Dhall contains two binaries related to using Dhall with Nix:
     This produces an expression that can be built by passing it to
     `dhallPackages.callPackage` in Nixpkgs.
 
-    `dhall-to-nixpkgs` is somewhat similar to the tool `cabal2nix`.
+    `dhall-to-nixpkgs` is somewhat similar to the tool
+    [`cabal2nix`](https://github.com/NixOS/cabal2nix).
     Just like Nix expressions produced by `cabal2nix` can be built
     by passing them to `haskellPackages.callPackage`, Nix expresssions
     produced by `dhall-to-nixpkgs` can be built by passing them to
     `dhallPackages.callPackage`.
 
     The problem with this usage of `dhall-to-nixpkgs` is that the above
-    Nix expression that has been produced takes all the remote imports
-    in the input Dhall files as arguments.
+    Nix expression takes all the remote imports in the input Dhall files as
+    arguments.
 
     For example, if you look at the
     [`mydhallfile.dhall`](https://github.com/cdepillabout/example-dhall-nix/blob/78f83e18fb046bfbb6a41109d9b767b84f46f425/mydhallfile.dhall#L1-L2),
-    you can see that it has a remote import of the following Dhall file.  It
-    also has an integrity check:
+    you can see that it has a remote import of the following Dhall file (note
+    it also has an integrity check):
 
     ```dhall
     let
@@ -154,10 +155,12 @@ Dhall contains two binaries related to using Dhall with Nix:
     ...
     ```
 
-    This `example-dhall-repo` becomes an argument to the expression output by
+    This `example-dhall-repo` becomes an argument to the function output by
     `dhall-to-nixpkgs`.  This means that we have to separately package
     `example-dhall-repo` by manually calling `dhall-to-nixpkgs` on it.
-    Although in theory, we shouldn't have to.  In the `mydhallfile.dhall` file,
+
+    In theory, we shouldn't have to explicitly package `example-dhall-repo` as
+    well.  In the `mydhallfile.dhall` file,
     you can see that there is an integrity check on the import
     <https://raw.githubusercontent.com/cdepillabout/example-dhall-repo/c1b0d0327/example1.dhall>.
     We should be able to reuse this integrity check to download this remote
@@ -166,15 +169,85 @@ Dhall contains two binaries related to using Dhall with Nix:
     The following section explains what was added to `dhall-to-nixpkgs` to
     force it to turn remote Dhall imports into Nix fixed-output derivations.
 
-### Adding a flag to `dhall-nixpkgs`
+### Adding a flag `--fixed-output-derivations` to `dhall-nixpkgs`
 
-https://github.com/dhall-lang/dhall-haskell/pull/2304
-https://github.com/dhall-lang/dhall-haskell/pull/2318
-https://github.com/dhall-lang/dhall-haskell/pull/2326
+After a bit of a false start in
+[Dhall PR #2304](https://github.com/dhall-lang/dhall-haskell/pull/2304)
+and bunch of help from [Gabriella Gonzalez](https://www.haskellforall.com/),
+I put together
+[Dhall PR #2318](https://github.com/dhall-lang/dhall-haskell/pull/2318)
+and [#2326](https://github.com/dhall-lang/dhall-haskell/pull/2326)
+which add a new flag `--fixed-output-derivation` to the
+`dhall-to-nixpkgs directory` command.
+
+Here is an example of using this flag:
+
+```console
+$ dhall-to-nixpkgs directory --fixed-output-derivations --name "foo" --file "mydhallfile.dhall" ./.
+{ buildDhallDirectoryPackage, buildDhallUrl }:
+  buildDhallDirectoryPackage {
+    name = "foo";
+    src = ./.;
+    file = "mydhallfile.dhall";
+    source = false;
+    document = false;
+    dependencies = [
+      (buildDhallUrl {
+        url = "https://raw.githubusercontent.com/cdepillabout/example-dhall-repo/c1b0d0327146648dcf8de997b2aa32758f2ed735/example1.dhall";
+        hash = "sha256-ZTSiQUXpPbPfPvS8OeK6dDQE6j6NbP27ho1cg9YfENI=";
+        dhallHash = "sha256:6534a24145e93db3df3ef4bc39e2ba743404ea3e8d6cfdbb868d5c83d61f10d2";
+        })
+      (buildDhallUrl {
+        url = "https://raw.githubusercontent.com/dhall-lang/dhall-lang/9758483fcf20baf270dda5eceb10535d0c0aa5a8/Prelude/List/map.dhall";
+        hash = "sha256-3YRf+0Vo1AMn8qgX60LRxhOLkpynWNULwzES7zyIVoA=";
+        dhallHash = "sha256:dd845ffb4568d40327f2a817eb42d1c6138b929ca758d50bc33112ef3c885680";
+        })
+      (buildDhallUrl {
+        url = "https://raw.githubusercontent.com/dhall-lang/dhall-lang/9758483fcf20baf270dda5eceb10535d0c0aa5a8/Prelude/Text/upperASCII.dhall";
+        hash = "sha256-Ra5PvYFLBHTmXCik7pKyO5eYkvpbtzcwvJlnWueQyik=";
+        dhallHash = "sha256:45ae4fbd814b0474e65c28a4ee92b23b979892fa5bb73730bc99675ae790ca29";
+        })
+      ];
+    }
+```
+
+You can see that when passing this `--fixed-output-derivations` flag, the
+function produced no longer takes any arguments.  Instead, all dependencies are
+packaged as fixed-output derivations using a Nix function `buildDhallUrl`.
+
+The `hash` argument passed to `buildDhallUrl` is the Nix-compatible hash
+of the Dhall file specified in the `url` argument.  This is the same as
+the integrity check in the Dhall file, just base64-encoded instead of
+base16-encoded.
+
+This `--fixed-output-derivations` flag is available in `dhall-to-nixpkgs` as of
+[version 1.0.7](https://hackage.haskell.org/package/dhall-nixpkgs-1.0.7).
+
+In order to use this new `--fixed-output-derivations` flag, the `buildDhallUrl`
+function will need to be present in Nixpkgs.  The next section talks about
+getting that function in Nixpkgs.
 
 ### Adding `buildDhallUrl` to Nixpkgs
 
-https://github.com/NixOS/nixpkgs/pull/142825
+The `buildDhallUrl` function was added to Nixpkgs in
+[Nixpkgs PR #142825](https://github.com/NixOS/nixpkgs/pull/142825).
+
+A high-level explanation of `buildDhallUrl` is that it uses `dhall` to fetch the
+remote import, and then encodes the output in a standard format Dhall expects.
+This is done in a fixed-output derivation so that `dhall` can access the
+network.  This is able to be a fixed-output derivation because of the
+Dhall integrity check on the URL.
+
+The output of `buildDhallUrl` is a standard Nixpkgs Dhall package, similar
+to what is output by `dhallPackages.callPackage`. See the
+[Dhall section](https://nixos.org/manual/nixpkgs/stable/#sec-language-dhall)
+in the Nixpkgs manual for more info.
+
+`buildDhallUrl` is available in Nixpkgs 21.11, and `master` as of 2021-11-09.
+
+Now that `dhall-to-nixpkgs` has the `--fixed-output-derivations` flag,
+and `buildDhallUrl` in Nixpkgs, we can write `dhallDirectoryToNix`.  The next
+section explains this.
 
 ### Adding `dhallDirectoryToNix` to Nixpkgs
 
@@ -195,3 +268,9 @@ https://github.com/NixOS/nixpkgs/pull/144076
     These derivations are treated specially by Nix.  You're able to do network
     access during these derivations.  Fixed-output derivations are normally
     used for downloading files from the internet.
+
+[^3]: A third problem is that `dhall-to-nix` doesn't handle _all_ Dhall expressions,
+    so you're not able to convert any arbitrary Dhall expression to Nix.
+    But `dhall-to-nix` does seem good at converting JSON-like Dhall expressions
+    to Nix.  I imagine most Dhall files that people want to read into
+    Nix are basic JSON-like expressions.
