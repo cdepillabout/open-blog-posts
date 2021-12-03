@@ -96,7 +96,7 @@ Dhall contains two binaries related to using Dhall with Nix:
     2
     ```
 
-    There are two problems with `dhallToNix`[^3]:
+    There are two problems with `dhallToNix`:
 
     1.  It doesn't handle things like imports.  Trying to do a remote import in
         `dhallToNix` gives you an error saying that remote imports are not
@@ -243,7 +243,7 @@ to what is output by `dhallPackages.callPackage`. See the
 [Dhall section](https://nixos.org/manual/nixpkgs/stable/#sec-language-dhall)
 in the Nixpkgs manual for more info.
 
-`buildDhallUrl` is available in Nixpkgs 21.11, and `master` as of 2021-11-09.
+`buildDhallUrl` is available in Nixpkgs 21.11, and Nixpks `master` as of 2021-11-09.
 
 Now that `dhall-to-nixpkgs` has the `--fixed-output-derivations` flag,
 and `buildDhallUrl` in Nixpkgs, we can write `dhallDirectoryToNix`.  The next
@@ -251,10 +251,53 @@ section explains this.
 
 ### Adding `dhallDirectoryToNix` to Nixpkgs
 
-TODO: Write this section:
-https://github.com/NixOS/nixpkgs/pull/144076
+[Nixpkgs PR 144076](https://github.com/NixOS/nixpkgs/pull/144076) is adding
+the `dhallDirectoryToNix` function to Nixpkgs.
+
+`dhallDirectoryToNix` uses
+[import-from-derivation (IFD)](https://blog.hercules-ci.com/2019/08/30/native-support-for-import-for-derivation/)
+to easily read in a directory of Dhall files into Nix.
+Here's an example call to `dhallDirectoryToNix` again:
+
+```nix
+nix-repl> dhallDirectoryToNix { src = /some/path/to/example-dhall-nix; file = "mydhallfile.dhall"; }
+[ "BILLBILLbillbill" "JANEJANEjanejane" "TESTTESTtesttest" "TESTTESTtesttest" "TESTTESTtesttest" ]
+```
+
+`dhallDirectoryToNix` roughly does the following steps:
+
+1. Call `dhall-to-nixpkgs` on the `src` passed to `dhallDirectoryToNix`.
+    This produces a Nix file corresponding to a Nixpkgs Dhall package.
+2. Use IFD to import and build the Nixpkgs Dhall package produced in the
+    previous step.  This uses `buildDhallUrl` under the hood.
+3. Call `dhallToNix` on the resulting Nixpkgs Dhall package in the previous step.
+    This evaluates the Dhall package built in the previous step and converts
+    it to Nix code.
+
+Check out the above PR if you're interested in exactly how this works.
+
+`dhallDirectoryToNix` should be available in Nixpkgs `master` as soon as the
+above PR is merged in, and Nixpkgs 22.05 when it is released.
+
+## Caveats
+
+There are two problems with `dhallDirectoryToNix` you might run into:
+
+1.  `dhall-to-nix` can't convert _all_ Dhall expressions into Nix,
+    so you're not able to convert any arbitrary Dhall expression to Nix.
+    But `dhall-to-nix` does seem good at converting JSON-like Dhall expressions
+    to Nix.  I imagine most Dhall files that people want to read into
+    Nix are basic JSON-like expressions.
+2.  `dhallDirectoryToNix` doesn't seem to work well when using it from a
+    flake.  You can find out more in
+    [this related issue](https://github.com/cdepillabout/purescript2nix).
 
 ## Conclusion
+
+Implementing `dhallDirectoryToNix` ended up being harder than I was expecting,
+but came out quite nice.  `dhallDirectoryToNix` is an easy way to read an
+arbitrary directory of Dhall files in as a Nix expression.  It even supports
+remote imports in your Dhall files (as long as they have integrity checks).
 
 ## Footnotes
 
@@ -269,9 +312,3 @@ https://github.com/NixOS/nixpkgs/pull/144076
     These derivations are treated specially by Nix.  You're able to do network
     access during these derivations.  Fixed-output derivations are normally
     used for downloading files from the internet.
-
-[^3]: A third problem is that `dhall-to-nix` doesn't handle _all_ Dhall expressions,
-    so you're not able to convert any arbitrary Dhall expression to Nix.
-    But `dhall-to-nix` does seem good at converting JSON-like Dhall expressions
-    to Nix.  I imagine most Dhall files that people want to read into
-    Nix are basic JSON-like expressions.
