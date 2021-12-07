@@ -5,6 +5,9 @@ tags: nix
 draft: false
 ------------------------------------------------------
 
+*This post is part of a series called
+[The Road to `purescript2nix`](./2021-12-20-road-to-purescript2nix.md).*
+
 I recently sent a few PRs to Dhall and Nixpkgs that add functionality for
 easily reading in a directory of Dhall files into Nix.
 
