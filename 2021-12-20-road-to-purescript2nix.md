@@ -11,7 +11,7 @@ This is a Nix function that lets you easily build a PureScript project with
 Nix.
 
 There were a couple steps along the way, and this blog post series details all
-the steps.  If you're only interested in using `purescript2nix` jump directly
+the steps.  If you're only interested in using `purescript2nix`, jump directly
 to the last post.
 
 1.  [`dhallDirectoryToNix`](./2021-12-20-dhallDirectoryToNix)
