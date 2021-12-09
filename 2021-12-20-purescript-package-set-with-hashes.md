@@ -9,7 +9,7 @@ draft: false
 [The Road to `purescript2nix`](./2021-12-20-road-to-purescript2nix.md).*
 
 The [PureScript package sets](https://github.com/purescript/package-sets)
-are Dhall files with a group of PureScript packages that are known to all
+are Dhall files that specify a group of PureScript packages that are known to all
 compile together.  If you're coming from Haskell, this is similar to a
 [Stackage resolver](https://www.stackage.org/).
 
@@ -24,7 +24,7 @@ proof-of-concept package set that contains hashes, and how it can be used.
 
 ## Package Sets
 
-Here's an example of a two packages from a PureScript package set:
+Here's an example of two packages from a PureScript package set:
 
 ```dhall
 { abides =
@@ -43,11 +43,11 @@ Here's an example of a two packages from a PureScript package set:
 ```
 
 The two packages are `abides` and `ace`.  You can see that each package has a
-list of dependencies, a repo, and an associated Git tag (`version`).
+list of dependencies, a repository, and an associated Git tag (`version`).
 
 I created an
 [RFC for adding a `hash` field](https://github.com/purescript/package-sets/issues/1042)
-to each package, as well as an associated
+to each package, as well as a
 [PR adding a script for computing hashes](https://github.com/purescript/package-sets/pull/1043).
 
 The script for computing hashes takes an existing package set (like the example
@@ -85,12 +85,12 @@ PureScript package sets.  The PureScript Registry is somewhat similar to the
 idea of package sets, but more flexible and featureful.
 
 The above RFC and PR was not accepted on the grounds that new features won't be
-added to the package sets repo.  Also, the PureScript Registry will contain hashes
+added to the package sets repository.  Also, the PureScript Registry will contain hashes
 for package versions.  It doesn't sound like there is a firm release date for
 the Registry, but Fabrizio says that they'd like to
 [get the Registry working sometime in December 2021](https://github.com/purescript/package-sets/issues/1042#issuecomment-981626792).
 
-However, if you'd like have PureScript package sets buildable with a system
+However, if you'd like have old PureScript package sets buildable with a system
 that requires hashed inputs (like Nix), you may want to take a look at the
 this issue: <https://github.com/cdepillabout/purescript2nix/issues/4>
 
