@@ -31,7 +31,7 @@ purescript2nix {
 
 This produces a derivation that will build your source code.
 
-The `purescript2nix` repo contains an
+The `purescript2nix` repository contains an
 [example package](https://github.com/cdepillabout/purescript2nix/blob/d16ed5b38a26ea72d114cc0e3df0db5bd20e902b/nix/overlay.nix#L8-L17)
 that you may want to play around with.
 
@@ -46,7 +46,7 @@ Under the covers, `purescript2nix` will roughly do the following things:
     function.
 
 2. Compute all transitive dependencies for the package
-    you are trying to build given an input package set.
+    you are trying to build, given an input package set.
 
     This is mainly done with the Nix function
     `builtins.genericClosure`[^2].
@@ -57,7 +57,10 @@ Under the covers, `purescript2nix` will roughly do the following things:
 
 4. Actually compile the PureScript code.
 
-    `purs` is called directly.
+    `purs` is called directly to do this.
+
+The output of `purescript2nix` is a derivation that contains all the compiled
+PureScript code.
 
 ## Why write `purescript2nix`?
 
@@ -65,16 +68,16 @@ I was a mentor for [Summer of Nix 2021](https://summer.nixos.org/).
 One of the members on my team, David Hauer ([@DavHau](https://github.com/DavHau)),
 started the project [dream2nix](https://github.com/nix-community/dream2nix).
 dream2nix is meant to be a generic framework to wrap up all the _lang2nix_
-tools (like [cabal2nix](https://github.com/NixOS/cabal2nix),
-[crate2nix](https://github.com/kolloch/crate2nix),
-yarn2nix, [poetry2nix](https://github.com/nix-community/poetry2nix), etc) and
+tools (like [`cabal2nix`](https://github.com/NixOS/cabal2nix),
+[`crate2nix`](https://github.com/kolloch/crate2nix),
+`yarn2nix`, [`poetry2nix`](https://github.com/nix-community/poetry2nix), etc) and
 provide a unified interface.
 
 I wanted to contribute a backend to dream2nix for PureScript, but it seemed
 like there weren't any easy approaches to building a PureScript project with
 Nix.  Most current approaches require a manual steps for dumping the contents
 of the `spago.dhall` and `packages.dhall` files, as well getting Nix-compatible
-hashes for the PureScript packages in the package set.
+hashes for all PureScript dependencies.
 
 I wanted to eliminate these manual steps, so I started thinking about
 what would be required for an easy-to-use `purescript2nix` function.
@@ -86,17 +89,17 @@ The two big things necessary for this are:
 -   [Nix-compatible hashes](./2021-12-20-purescript-package-set-with-hashes)
     in the PureScript package sets
 
-Implementing these two things took a surprising amount of time, but with
+Implementing these two things took a surprising amount of time. But with
 these in place, putting together `purescript2nix` was relatively easy.
 
-Although after all this work, I ran out of steam and didn't end up creating a
+Although, after this work, I ran out of steam and didn't end up creating a
 PureScript backend for `dream2nix`.  I have
 [opened an issue](https://github.com/cdepillabout/purescript2nix/issues/5)
 about it in case anyone wants to work on this.
 
 ## Caveats
 
-Currently the big caveat with `purescript2nix` is that it requires
+Currently, the big caveat with `purescript2nix` is that it requires
 using a PureScript package set with Nix-compatible hashes.
 See [this issue](https://github.com/cdepillabout/purescript2nix/issues/4)
 for more information.
@@ -105,7 +108,7 @@ There is also [an issue](https://github.com/cdepillabout/purescript2nix/issues/1
 with using `purescript2nix` when building from a Nix Flake.
 
 I would welcome help on either of these issues (or anything else on the
-purescript2nix issue tracker).
+`purescript2nix` issue tracker).
 
 ## Conclusion
 
@@ -113,9 +116,9 @@ If you're looking for an easy way to build a PureScript package with
 Nix, `purescript2nix` might be a good choice.
 
 If you're looking to adopt `purescript2nix` into your build system
-professionally, I am open to freelance or consulting arrangements.
+professionally, I am open to freelancing or consulting arrangements.
 I am of course open to any other freelance or consulting projects involving Nix.
-Please feel free to [get in touch](https://functor.tokyo/about) for more info.
+Feel free to [get in touch](https://functor.tokyo/about) for more info.
 
 ## Footnotes
 
@@ -127,7 +130,7 @@ Please feel free to [get in touch](https://functor.tokyo/about) for more info.
     info.  [Open an issue](https://github.com/cdepillabout/purescript2nix/issues)
     if you need more help.
 
-[^2]: I learned about this from Justin Woo in his post
+[^2]: I learned about this from Justin Woo.  He has a post about this called
     [Working with PureScript package sets with just Nix](https://qiita.com/kimagure/items/25ca3ddcc8e0b636884e).
-    I put together my own example of `builtins.genericClosure` on
+    I put together my own example of `builtins.genericClosure` in
     [this issue](https://github.com/NixOS/nix/issues/552#issuecomment-971212372).
