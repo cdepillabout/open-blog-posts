@@ -6,7 +6,7 @@ draft: false
 ------------------------------------------------------
 
 *This post is part of a series called
-[The Road to `purescript2nix`](./2021-12-10-road-to-purescript2nix.md).*
+[The Road to `purescript2nix`](./2021-12-10-road-to-purescript2nix).*
 
 [`purescript2nix`](https://github.com/cdepillabout/purescript2nix)
 is a Nix function that allows you to easily build
@@ -42,7 +42,7 @@ Under the covers, `purescript2nix` will roughly do the following things:
 1. Read the `spago.dhall` and `packages.dhall` files into Nix.
 
     This is done with the Nix function
-    [`dhallDirectoryToNix`](./2021-12-10-dhallDirectoryToNix.md).
+    [`dhallDirectoryToNix`](./2021-12-10-dhallDirectoryToNix).
 
 2. Compute all transitive dependencies for the package
     you are trying to build, given an input package set.
@@ -83,7 +83,7 @@ what would be required for an easy-to-use `purescript2nix` function.
 The two big things necessary for this are:
 
 -   the ability to
-    [read Dhall files in as Nix](./2021-12-10-dhallDirectoryToNix.md)
+    [read Dhall files in as Nix](./2021-12-10-dhallDirectoryToNix)
     (even when the Dhall files have remote imports)
 -   [Nix-compatible hashes](./2021-12-10-purescript-package-set-with-hashes)
     in the PureScript package sets

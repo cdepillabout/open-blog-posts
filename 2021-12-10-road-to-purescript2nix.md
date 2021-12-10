@@ -24,6 +24,6 @@ to the last post.
     This post explains a method of adding a hash for each package to a
     PureScript package set.
 
-3.  [`purescript2nix`](./2021-12-10-purescript2nix.md)
+3.  [`purescript2nix`](./2021-12-10-purescript2nix)
 
     This post explains how to use `purescript2nix`.
