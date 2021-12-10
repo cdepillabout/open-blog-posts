@@ -1,7 +1,7 @@
 ------------------------------------------------------
 title: PureScript Package Sets with Hashes
 summary: PureScript package sets with hashes for consumption by Nix
-tags: nix
+tags: purescript
 draft: false
 ------------------------------------------------------
 

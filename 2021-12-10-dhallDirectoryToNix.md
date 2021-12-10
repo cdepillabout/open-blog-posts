@@ -1,7 +1,7 @@
 ------------------------------------------------------
 title: dhallDirectoryToNix
 summary: Easily turn a directory of Dhall files into Nix
-tags: nix
+tags: nixos
 draft: false
 ------------------------------------------------------
 

@@ -1,7 +1,7 @@
 ------------------------------------------------------
 title: The Road to purescript2nix
 summary: Steps to get to purescript2nix
-tags: nix
+tags: nixos, purescript
 draft: false
 ------------------------------------------------------
 

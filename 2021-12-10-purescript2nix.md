@@ -1,7 +1,7 @@
 ------------------------------------------------------
 title: purescript2nix
 summary: Easily build a PureScript project with Nix
-tags: nix
+tags: nixos, purescript
 draft: false
 ------------------------------------------------------
 
