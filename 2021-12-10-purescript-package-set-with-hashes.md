@@ -84,13 +84,13 @@ It seems like development has completely moved to the
 PureScript package sets.  The PureScript Registry is somewhat similar to the
 idea of package sets, but more flexible and featureful.
 
-The above RFC and PR was not accepted on the grounds that new features won't be
-added to the package sets repository.  Also, the PureScript Registry will contain hashes
+The above RFC and PR were not accepted on the grounds that new features won't be
+added to the package sets repository moving forward.  Also, the PureScript Registry will contain hashes
 for package versions.  It doesn't sound like there is a firm release date for
 the Registry, but Fabrizio says that they'd like to
 [get the Registry working sometime in December 2021](https://github.com/purescript/package-sets/issues/1042#issuecomment-981626792).
 
-However, if you'd like have old PureScript package sets buildable with a system
+However, if you'd like to get old PureScript package sets buildable with a system
 that requires hashed inputs (like Nix), you may want to take a look at the
 this issue: <https://github.com/cdepillabout/purescript2nix/issues/4>
 

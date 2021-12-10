@@ -72,7 +72,7 @@ build packages.
 
 Implementing `dhallDirectoryToNix` happened in a few stages:
 
-1.  Add functionality to the `dhall-to-nixpkgs` tool that uses fixed-output
+1.  Add functionality to the `dhall-to-nixpkgs` tool so that it can use fixed-output
     derivations for building Dhall packages.
 2.  The above change relies on a `buildDhallUrl` Nix function, so get that in
     Nixpkgs.

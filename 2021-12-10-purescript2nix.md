@@ -42,8 +42,7 @@ Under the covers, `purescript2nix` will roughly do the following things:
 1. Read the `spago.dhall` and `packages.dhall` files into Nix.
 
     This is done with the Nix function
-    [`dhallDirectoryToNix`](./2021-12-10-dhallDirectoryToNix.md)
-    function.
+    [`dhallDirectoryToNix`](./2021-12-10-dhallDirectoryToNix.md).
 
 2. Compute all transitive dependencies for the package
     you are trying to build, given an input package set.
@@ -57,7 +56,7 @@ Under the covers, `purescript2nix` will roughly do the following things:
 
 4. Actually compile the PureScript code.
 
-    `purs` is called directly to do this.
+    This is done by directly calling `purs`.
 
 The output of `purescript2nix` is a derivation that contains all the compiled
 PureScript code.
