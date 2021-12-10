@@ -6,7 +6,7 @@ draft: false
 ------------------------------------------------------
 
 *This post is part of a series called
-[The Road to `purescript2nix`](./2021-12-20-road-to-purescript2nix.md).*
+[The Road to `purescript2nix`](./2021-12-10-road-to-purescript2nix.md).*
 
 The [PureScript package sets](https://github.com/purescript/package-sets)
 are Dhall files that specify a group of PureScript packages that are known to all
