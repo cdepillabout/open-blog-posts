@@ -1,7 +1,7 @@
 ------------------------------------------------------
 title: Git no_push
 summary: Setup a Git remote so you can't accidentally push to it
-tags: nix
+tags: nixos
 draft: false
 ------------------------------------------------------
 
