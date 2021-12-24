@@ -8,6 +8,9 @@ draft: false
 *This post is the first post in a
 [series about PureNix](./2021-12-26-purenix).*
 
+[PureNix](https://github.com/purenix-org/purenix) is a Nix backend for
+[PureScript](https://www.purescript.org/).  PureNix allows you to write
+PureScript code and transpile it to Nix code.
 
 
 ## Conclusion
