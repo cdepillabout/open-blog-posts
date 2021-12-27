@@ -12,6 +12,26 @@ draft: false
 [PureScript](https://www.purescript.org/).  PureNix allows you to write
 PureScript code and transpile it to Nix code.
 
+This post gives an overview of PureScript, PureNix, and explains how to get
+started using PureNix.
+
+## PureScript
+
+[PureScript](https://en.wikipedia.org/wiki/PureScript) is a strongly-typed,
+pure functional programming language. Here's a small example of a function
+written in PureScript:
+
+```purescript
+module Main where
+
+import Prelude
+
+type FilePath = String
+
+subdirectory :: FilePath -> FilePath -> FilePath
+subdirectory p1 p2 = p1 <> "/" <> p2
+```
+
 
 ## Conclusion
 
