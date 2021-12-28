@@ -12,8 +12,8 @@ draft: false
 [PureScript](https://www.purescript.org/).  PureNix allows you to write
 PureScript code and transpile it to Nix code.
 
-This post gives an overview of PureScript, PureNix, and explains how to get
-started using PureNix.
+This post gives an overview of PureScript and PureNix. It then explains how to
+get started using PureNix.
 
 ## PureScript
 
@@ -48,8 +48,8 @@ backend code generator for Nix.
 ## PureNix
 
 PureNix works together with PureScript and Spago to compile PureScript code
-into Nix code.  Here's a small example of PureScript code, and what it gets
-compiled to:
+into Nix code.  Here's a small example of PureScript code, and the Nix code it
+gets compiled to:
 
 ```purescript
 module Main where
@@ -94,11 +94,12 @@ straight-forward.  You can see the PureScript string `greeting` becomes a
 simple Nix string.  `identity` has become a Nix function.  The constructors for
 `Maybe` (`Nothing` and `Just`) have become Nix functions[^2].  `fromMaybe` has
 become a Nix function.  If you work through the `__patternX` continuations in
-`fromMaybe`, you can see how they emulate the pattern matching in the PureScript
-`fromMaybe` function.
+`fromMaybe`, you can see how they
+[emulate the pattern matching](https://jonascarpay.com/posts/2021-11-08-nix-adts.html)
+in the PureScript `fromMaybe` function.
 
 Calling functions written in PureScript from Nix is quite fun.  It feels quite
-similar to working in the Haskell or PureScrit REPLs.  Here is an example of
+similar to working in the Haskell or PureScript REPL.  Here is an example of
 using the above functions from the Nix REPL:
 
 ```console
@@ -124,7 +125,7 @@ PureScript and compiling it to Nix.
 Once you have your environment setup, you'll likely be interested in what
 libraries are available for PureNix.  The currently available libraries
 are in the [purenix-org](https://github.com/purenix-org/) organization on
-GitHub.  There is also two PureNix issues you may be interested:
+GitHub.  There are also two PureNix issues you may be interested in:
 
 -   A [tracking issue](https://github.com/purenix-org/purenix/issues/37)
     for which PureScript standard libraries still need to be ported to PureNix.
@@ -151,7 +152,7 @@ to get started with.  You may have to write some FFI for Nix builtins, but
 other than that you should have no trouble using PureNix.  It should feel
 quite natural.
 
-If you have experience with PureScript and Nix (but not experience with
+If you have experience with PureScript and Nix (but no experience with
 Haskell), PureNix should still be pretty easy.  Unlike the main JavaScript
 backend for PureScript, PureNix is lazy.  This will feel a little weird at
 first, but since you already know Nix, this shouldn't be too difficult.
@@ -180,7 +181,7 @@ following resources very useful:
 
 If you have experience with Haskell or PureScript (but not Nix), you may
 have some trouble getting started.  It may be a little early to attempt
-to use PureNix.  You'd likely benefit from first reading the
+to use PureNix.  You would likely benefit from first reading the
 [Nix Manual](https://nixos.org/manual/nix/stable/).
 
 If you have experience with Nix (but not Haskell or PureScript), you will
@@ -188,9 +189,10 @@ likely have trouble getting started with PureNix.  I would recommend
 first trying to learn Haskell or PureScript.  If your goal is to use PureNix,
 then it doesn't really matter if you first learn Haskell or PureScript, since
 they are so similar.  Haskell seems to have more beginner-oriented resources
-than PureScript.  Keep in mind that like Nix, Haskell and PureScript have a
-steep learning curve.  Becoming proficient in Haskell or PureScript can be
-quite time-consuming.
+than PureScript.
+
+Keep in mind that like Nix, Haskell and PureScript have a steep learning curve.
+Becoming proficient in Haskell or PureScript can be quite time-consuming.
 
 ## Conclusion
 
@@ -203,9 +205,9 @@ it may take a lot of work until you feel comfortable with PureNix.
 
 ## Using PureNix Professionally
 
-If your company is considering PureNix to tame a complicated Nix codebase,
-Jonas and I currently have time available consulting or freelance.  Feel free
-to [get in touch](/about).  We are also available for any other
+If your company is considering PureNix in order to tame a complicated Nix
+codebase, Jonas and I currently have time available consulting or freelance.
+Feel free to [get in touch](/about).  We are also available for any other
 Nix/Haskell/PureScript-related work.
 
 ## Footnotes
