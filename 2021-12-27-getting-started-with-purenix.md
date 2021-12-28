@@ -97,6 +97,20 @@ become a Nix function.  If you work through the `__patternX` continuations in
 `fromMaybe`, you can see how they emulate the pattern matching in the PureScript
 `fromMaybe` function.
 
+Calling functions written in PureScript from Nix is quite fun.  It feels quite
+similar to working in the Haskell or PureScrit REPLs.  Here is an example of
+using the above functions from the Nix REPL:
+
+```console
+$ nix repl ./output/Main/default.nix
+nix-repl> identity greeting
+"Hello, world!"
+nix-repl> fromMaybe "bye" (Just "hello")
+"hello"
+nix-repl> fromMaybe "bye" Nothing
+"bye"
+```
+
 Now that you have a taste of PureNix, the next section explains how to get
 started actually writing PureNix code.
 
@@ -180,8 +194,19 @@ quite time-consuming.
 
 ## Conclusion
 
+If you have experience with Haskell or PureScript, PureNix should be easy to
+get started with.  If you don't have experience with Haskell or PureScript,
+it may take a lot of work until you feel comfortable with PureNix.
+
 *This post is the first post in a
 [series about PureNix](./2021-12-26-purenix).*
+
+## Using PureNix Professionally
+
+If your company is considering PureNix to tame a complicated Nix codebase,
+Jonas and I currently have time available consulting or freelance.  Feel free
+to [get in touch](/about).  We are also available for any other
+Nix/Haskell/PureScript-related work.
 
 ## Footnotes
 
