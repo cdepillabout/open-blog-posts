@@ -67,7 +67,9 @@ fromMaybe a Nothing = a
 fromMaybe _ (Just a) = a
 ```
 
-PureNix compiles this PureScript code to the following Nix code[^1]:
+PureNix compiles this PureScript code to the following Nix code[^modified]:
+
+[^modified]: This has been slightly simplified to make it a little easier to understand.
 
 ```nix
 let
@@ -92,11 +94,13 @@ in
 Except for the pattern matching in `fromMaybe`, this should look pretty
 straight-forward.  You can see the PureScript string `greeting` becomes a
 simple Nix string.  `identity` has become a Nix function.  The constructors for
-`Maybe` (`Nothing` and `Just`) have become Nix functions[^2].  `fromMaybe` has
+`Maybe` (`Nothing` and `Just`) have become Nix functions[^tagged].  `fromMaybe` has
 become a Nix function.  If you work through the `__patternX` continuations in
 `fromMaybe`, you can see how they
 [emulate the pattern matching](https://jonascarpay.com/posts/2021-11-08-nix-adts.html)
 in the PureScript `fromMaybe` function.
+
+[^tagged]: PureScript data constructors become tagged records in Nix.
 
 Calling functions written in PureScript from Nix is quite fun.  It feels quite
 similar to working in the Haskell or PureScript REPL.  Here is an example of
@@ -209,9 +213,3 @@ If your company is considering PureNix in order to tame a complicated Nix
 codebase, Jonas and I currently have time available consulting or freelance.
 Feel free to [get in touch](/about).  We are also available for any other
 Nix/Haskell/PureScript-related work.
-
-## Footnotes
-
-[^1]: This has been slightly simplified to make it a little easier to understand.
-
-[^2]: PureScript data constructors become tagged records in Nix.
