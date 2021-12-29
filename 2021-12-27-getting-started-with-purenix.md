@@ -69,7 +69,8 @@ fromMaybe _ (Just a) = a
 
 PureNix compiles this PureScript code to the following Nix code[^modified]:
 
-[^modified]: This has been slightly simplified to make it a little easier to understand.
+[^modified]: The formatting has been slightly cleaned up to make it a little
+    easier to understand.
 
 ```nix
 let
