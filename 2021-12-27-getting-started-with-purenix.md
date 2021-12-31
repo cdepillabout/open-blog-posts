@@ -147,63 +147,11 @@ about PureNix, but the API of the PureNix libraries that have been ported so
 far is almost the same as the PureScript version of the libraries, so searching
 for functions on Pursuit is still helpful.
 
-Now that you have an idea how to get started with PureNix, what sorts of
-developers will find PureNix easy to use?
-
-## Who is PureNix for?
-
-If you have experience with PureScript, Nix, and Haskell, PureNix will be easy
-to get started with.  You may have to write some FFI for Nix builtins, but
-other than that you should have no trouble using PureNix.  It should feel
-quite natural.
-
-If you have experience with PureScript and Nix (but no experience with
-Haskell), PureNix should still be pretty easy.  Unlike the main JavaScript
-backend for PureScript, PureNix is lazy.  This will feel a little weird at
-first, but since you already know Nix, this shouldn't be too difficult.
-There are also a few type-classes in PureScript that aren't necessary in
-PureNix, like
-[Lazy](https://pursuit.purescript.org/packages/purescript-control/5.0.0/docs/Control.Lazy#t:Lazy)
-and
-[MonadRec](https://pursuit.purescript.org/packages/purescript-tailrec/5.0.1/docs/Control.Monad.Rec.Class).
-
-If you have experience with Haskell and Nix (but not PureScript), it
-might take you a little bit of time to get used to the PureScript
-standard library, but other than that you shouldn't have many problems.
-In general, PureScript is split up into a large number of small packages and
-modules, more so than Haskell.  But most functions are named similarly, so
-you shouldn't have much trouble in practice.  You'll likely find the
-following resources very useful:
-
--   [Pursuit](https://pursuit.purescript.org/).  A combination of a search engine
-    like Hoogle, and API documentation like Hackage, but for PureScript.
--   [Differences from Haskell](https://github.com/purescript/documentation/blob/master/language/Differences-from-Haskell.md).
-    Official documentation on the differences between PureScript and Haskell.
--   [Language Documentation](https://github.com/purescript/documentation/tree/master/language).
-    Official documentation on the PureScript language.  You'll likely want to
-    focus on the document about Records, since they are one of the main
-    differences between PureScript and Haskell.
-
-If you have experience with Haskell or PureScript (but not Nix), you may
-have some trouble getting started.  It may be a little early to attempt
-to use PureNix.  You would likely benefit from first reading the
-[Nix Manual](https://nixos.org/manual/nix/stable/).
-
-If you have experience with Nix (but not Haskell or PureScript), you will
-likely have trouble getting started with PureNix.  I would recommend
-first trying to learn Haskell or PureScript.  If your goal is to use PureNix,
-then it doesn't really matter if you first learn Haskell or PureScript, since
-they are so similar.  Haskell seems to have more beginner-oriented resources
-than PureScript.
-
-Keep in mind that like Nix, Haskell and PureScript have a steep learning curve.
-Becoming proficient in Haskell or PureScript can be quite time-consuming.
-
 ## Conclusion
 
-If you have experience with Haskell or PureScript, PureNix should be easy to
-get started with.  If you don't have experience with Haskell or PureScript,
-it may take a lot of work until you feel comfortable with PureNix.
+PureNix gives you a way to write Haskell-like code and compile it to Nix.  This
+is convenient for developers comfortable with Haskell-like languages, and
+trying to write a non-trivial library in Nix.
 
 *This post is the first post in a
 [series about PureNix](./2021-12-26-purenix).*
