@@ -75,11 +75,15 @@ PureNix compiles this PureScript code to the following Nix code[^modified]:
 ```nix
 let
   greeting = "Hello, world!";
+
+  identity = v: v;
+
   Nothing = {__tag = "Nothing";};
   Just = value0:
     { __tag = "Just";
       __field0 = value0;
     };
+
   fromMaybe = v: v1:
     let
       __pattern0 = __fail: if v1.__tag == "Nothing" then let a = v; in a else __fail;
@@ -87,7 +91,6 @@ let
       __patternFail = builtins.throw "Pattern match failure in src/Main.purs at 11:1 - 11:41";
     in
       __pattern0 (__pattern1 __patternFail);
-  identity = v: v;
 in
   {inherit greeting Nothing Just fromMaybe;}
 ```
