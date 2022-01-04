@@ -6,7 +6,7 @@ draft: false
 ------------------------------------------------------
 
 *This post is the first post in a
-[series about PureNix](./2021-12-26-purenix).*
+[series about PureNix](./2022-01-03-purenix).*
 
 [PureNix](https://github.com/purenix-org/purenix) is a Nix backend for
 [PureScript](https://www.purescript.org/).  PureNix allows you to write
@@ -158,7 +158,7 @@ is convenient for developers comfortable with Haskell-like languages, and
 trying to write a non-trivial library in Nix.
 
 *This post is the first post in a
-[series about PureNix](./2021-12-26-purenix).*
+[series about PureNix](./2022-01-03-purenix).*
 
 ## Using PureNix Professionally
 
