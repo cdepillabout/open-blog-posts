@@ -122,10 +122,11 @@ started actually writing PureNix code.
 
 ## Getting Started
 
-There is a post on the NixOS Discourse that explains how to
-[put together a development environment for PureNix](https://discourse.nixos.org/t/purenix-nix-backend-for-purescript/15756/3).
-It explains how to get to the point where you can actually start writing
-PureScript and compiling it to Nix.
+There is documentation in the PureNix repository that explains how to
+put together a
+[development environment](https://github.com/purenix-org/purenix/blob/main/docs/quick-start.md)
+for PureNix.  It explains how to get to the point where you can actually start
+writing PureScript and compiling it to Nix.
 
 Once you have your environment setup, you'll likely be interested in what
 libraries are available for PureNix.  The currently available libraries
