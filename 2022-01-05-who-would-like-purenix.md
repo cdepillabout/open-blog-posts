@@ -2,7 +2,7 @@
 title: Who Would Find PureNix Easy to Use?
 summary: What sort of developers would find PureNix easy to get started with?
 tags: haskell, nixos, purescript
-draft: true
+draft: false
 ------------------------------------------------------
 
 *This post is the second post in a
