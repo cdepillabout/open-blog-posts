@@ -31,9 +31,14 @@ There are two things you may want to keep in mind:
     [FFI code](https://github.com/cdepillabout/cabal2nixWithoutIFD/blob/484515bdec2ccf9dfc02b9a442b801bc2d17b9cc/purescript-parser-combinator/src/NixBuiltins.nix).
 
 -   Nix is a pure language, so there is nothing like Haskell's `IO` type or
-    PureScript's `Effect` type in PureNix.  The fact that you can have
+    PureScript's `Effect` type in PureNix[^effect].  The fact that you can have
     all your functions be pure in PureScript works out really nicely with
     PureNix and Nix.
+
+[^effect]: We had some discussion about this on GitHub, and it turns out there
+    may be some
+    [good reasons](https://github.com/purenix-org/temp-package-set/pull/1)
+    for using an `IO` or `Effect`-like type in PureNix.
 
 ## Developers that Know PureScript and Nix (but not Haskell)
 
@@ -132,5 +137,5 @@ languages, or Nix.
 
 If your company is considering PureNix in order to tame a complicated Nix
 codebase, [Jonas](https://jonascarpay.com/) and I currently have time available
-consulting or freelance.  Feel free to [get in touch](/about).  We are also
+for consulting or freelance.  Feel free to [get in touch](/about).  We are also
 available for any other Nix/Haskell/PureScript-related work.

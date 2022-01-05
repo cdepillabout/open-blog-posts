@@ -166,5 +166,5 @@ trying to write a non-trivial library in Nix.
 
 If your company is considering PureNix in order to tame a complicated Nix
 codebase, [Jonas](https://jonascarpay.com/) and I currently have time available
-consulting or freelance.  Feel free to [get in touch](/about).  We are also
+for consulting or freelance.  Feel free to [get in touch](/about).  We are also
 available for any other Nix/Haskell/PureScript-related work.
