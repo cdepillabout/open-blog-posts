@@ -56,7 +56,7 @@ standard library. But other than that, you shouldn't have many problems.
 
 In general, PureScript is split up into a large number of small packages and
 modules, much more so than Haskell.  For example, `Maybe` and `Either` live
-in completely separate packages, they are not included the `Prelude`:
+in completely separate packages. They are not included the `Prelude`:
 
 -   [purescript-maybe](https://github.com/purenix-org/purescript-maybe)
 -   [purescript-either](https://github.com/purenix-org/purescript-either)
@@ -82,7 +82,7 @@ You'll likely find the following resources very useful:
     still helpful.  In the future it would be nice if there was a Pursuit
     specifically for PureNix.
 
-## Developers that Know Haskell and PureScript (but not Nix)
+## Developers that Know Haskell or PureScript (but not Nix)
 
 If you have experience with Haskell or PureScript (but not Nix), you may
 have some trouble getting started.  It may be a little early to attempt
@@ -127,3 +127,10 @@ languages, or Nix.
 *This post is the second post in a
 [series about PureNix](./2022-01-03-purenix).  The previous post was about
 [getting started with PureNix](./2022-01-04-getting-started-with-purenix).*
+
+## Using PureNix Professionally
+
+If your company is considering PureNix in order to tame a complicated Nix
+codebase, [Jonas](https://jonascarpay.com/) and I currently have time available
+consulting or freelance.  Feel free to [get in touch](/about).  We are also
+available for any other Nix/Haskell/PureScript-related work.

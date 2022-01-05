@@ -6,7 +6,8 @@ draft: false
 ------------------------------------------------------
 
 *This post is the first post in a
-[series about PureNix](./2022-01-03-purenix).*
+[series about PureNix](./2022-01-03-purenix). The next post is about
+[who would find PureNix easy to use](./2022-01-05-who-would-like-purenix).*
 
 [PureNix](https://github.com/purenix-org/purenix) is a Nix backend for
 [PureScript](https://www.purescript.org/).  PureNix allows you to write
@@ -158,11 +159,12 @@ is convenient for developers comfortable with Haskell-like languages, and
 trying to write a non-trivial library in Nix.
 
 *This post is the first post in a
-[series about PureNix](./2022-01-03-purenix).*
+[series about PureNix](./2022-01-03-purenix). The next post is about
+[who would find PureNix easy to use](./2022-01-05-who-would-like-purenix).*
 
 ## Using PureNix Professionally
 
 If your company is considering PureNix in order to tame a complicated Nix
-codebase, Jonas and I currently have time available consulting or freelance.
-Feel free to [get in touch](/about).  We are also available for any other
-Nix/Haskell/PureScript-related work.
+codebase, [Jonas](https://jonascarpay.com/) and I currently have time available
+consulting or freelance.  Feel free to [get in touch](/about).  We are also
+available for any other Nix/Haskell/PureScript-related work.
