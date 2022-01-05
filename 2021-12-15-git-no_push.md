@@ -51,3 +51,21 @@ a command like this:
 ```console
 $ git push -v git@github.com:NixOS/nixpkgs.git HEAD
 ```
+
+You can also explicitly set the `pushRemote` for a single branch.  This will
+allow you to directly push that given branch (but no other branches).  The
+easiest way to set this up is directly through the `.git/config` file.  Add an
+entry for the branch that looks similar to the following:
+
+```console
+$ cat .git/config
+...
+[branch "haskell-updates"]
+	remote = origin
+	pushRemote = git@github.com:NixOS/nixpkgs.git
+	merge = refs/heads/haskell-updates
+...
+```
+
+This makes it so that when the `haskell-updates` branch is checked out, you can
+run `git push` and it automatically pushes to `git@github.com:NixOS/nixpkgs.git`.
