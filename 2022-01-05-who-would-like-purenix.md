@@ -6,8 +6,10 @@ draft: false
 ------------------------------------------------------
 
 *This post is the second post in a
-[series about PureNix](./2022-01-03-purenix).  The previous post was about
-[getting started with PureNix](./2022-01-04-getting-started-with-purenix).*
+[series about PureNix](./2022-01-03-purenix).  The previous post is about
+[getting started with PureNix](./2022-01-04-getting-started-with-purenix).
+The next post is about
+[why we started writing PureNix](./2022-01-10-why-purenix).*
 
 PureNix will be easy to get started with for developers that have a good
 understanding of both Haskell-like languages and Nix.  Developers without this
@@ -130,8 +132,10 @@ Nix.  You may have a harder time if you're new to either Haskell-like
 languages, or Nix.
 
 *This post is the second post in a
-[series about PureNix](./2022-01-03-purenix).  The previous post was about
-[getting started with PureNix](./2022-01-04-getting-started-with-purenix).*
+[series about PureNix](./2022-01-03-purenix).  The previous post is about
+[getting started with PureNix](./2022-01-04-getting-started-with-purenix).
+The next post is about
+[why we started writing PureNix](./2022-01-10-why-purenix).*
 
 ## Using PureNix Professionally
 
