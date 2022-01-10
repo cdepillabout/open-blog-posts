@@ -50,8 +50,8 @@ lock file and transform it into a Nix derivation.
 ## Import From Derivation (IFD) and Haskell
 
 A quick explanation of how IFD works is that you first create a Nix derivation
-that _outputs_ a `.nix` file.  If you build the derivation, then your created
-`.nix` file will end up in the Nix store.  Within the same run of Nix, you then
+that _outputs_ a `.nix` file.  If you build the derivation, the `.nix` that is created
+will end up in the Nix store.  Within the same run of Nix, you then
 _`import`_ this `.nix` file you just built.
 
 If you'd like to see a more detailed introduction to IFD, checkout the following
@@ -60,20 +60,67 @@ two links:
 - <https://blog.hercules-ci.com/2019/08/30/native-support-for-import-for-derivation/>
 - <https://nixos.wiki/wiki/Import_From_Derivation>
 
-There is a widely-used function in Nixpkgs that uses IFD for a Haskell package:
+There is a widely-used function in Nixpkgs that uses IFD to build a Haskell package:
 [`haskellPackages.callCabal2nix`](https://github.com/NixOS/nixpkgs/blob/6a7bafcb0fd068716ca6659e59d197044c41a9a7/pkgs/development/haskell-modules/make-package-set.nix#L220).
 Here's a rough explanation of how `callCabal2nix` works:
 
 1.  A derivation is created that internally calls
     [`cabal2nix`](https://github.com/NixOS/cabal2nix).  `cabal2nix` reads in a
-    `.cabal` file and outputs a `.nix` file.  This `.nix` file is a derivation
-    that can be built with the
+    input `.cabal` file and outputs a `.nix` file.  This `.nix` file is a
+    derivation that can be built with the
     [default Haskell builder](https://github.com/NixOS/nixpkgs/blob/6a7bafcb0fd068716ca6659e59d197044c41a9a7/pkgs/development/haskell-modules/generic-builder.nix)
     in Nixpkgs.  `cabal2nix` uses the [`Cabal`](https://hackage.haskell.org/package/Cabal)
-    Haskell library internally to parse the input `.cabal` file and get data out of it.
+    Haskell library internally to parse the input `.cabal` file and get data
+    out of it (in order to translate it to raw Nix code).
 2.  Building the derivation from the previous step outputs a `.nix` file.
     This `.nix` file is _imported_ and passed to
     [`haskellPackages.callPackage`](https://github.com/NixOS/nixpkgs/blob/6a7bafcb0fd068716ca6659e59d197044c41a9a7/pkgs/development/haskell-modules/make-package-set.nix#L118).
+3.  The derivation output from `haskellPackages.callPackage` in the previous
+    step is built.  The output of this derivation is a normal Haskell library.
+
+IFD is necessary in this process in the first step.  In order to translate a
+`.cabal` file into a Nix expression, a Haskell program `cabal2nix` needs to be
+run.  `cabal2nix` uses the Haskell `Cabal` library internally.  It is necessary
+to internally rely on the `Cabal` library because `.cabal` files are relatively
+complicated.  Parsing a raw `.cabal` file directly from within Nix would be
+quite difficult.
+
+After hearing that `poetry2nix` doesn't require IFD, I started thinking about
+what would be necessary to write a `callCabal2nix` function that doesn't rely
+on IFD.
+
+## `callCabal2nix` Without IFD
+
+In order to write a `callCabal2nix` function without relying on IFD, you would
+first need to read in a `.cabal` file with the Nix `builtins.readFile` function.
+You would then have to parse the raw `.cabal` file and pull out all the
+important information.  For building Haskell packages with Nix, the main information
+necessary from the `.cabal` file is the list of direct dependencies.
+
+The big difficulty in this process is parsing the `.cabal` file.  The `.cabal`
+file format is not a format that Nix natively understands (like JSON or TOML).
+The only widely-used library for parsing `.cabal` files is
+[`Cabal`](https://hackage.haskell.org/package/Cabal), and this is only
+available as a Haskell package.
+
+If you wanted to parse a `.cabal` file with Nix, you would need to write a
+`.cabal` parser in Nix itself.  This would be quite a challenge[^nix-parsec].
+
+[^nix-parsec]: There is a Nix library called
+    [`nix-parsec`](https://github.com/nprindle/nix-parsec) that implements a
+    [`parsec`](https://hackage.haskell.org/package/parsec)-like library in raw
+    Nix.  This could potentially be used as a base, but it would still be
+    completely non-trivial to write a full `.cabal` parser in raw Nix.
+
+I was thinking that if I was going to write a `callCabal2nix` function that
+doesn't use IFD, I would want to write it in a Haskell-like language that
+provides features like type-checking, algebraic data types, type classes, etc.
+Compiling this language would need to output Nix code, so that Nix can execute
+it.
+
+TODO: write about how my first idea was PureScript and then I told Jonas.
+
+## Jonas
 
 
 
