@@ -38,7 +38,7 @@ similar to Haskell's `stack.yaml.lock` file, Rust's `Cargo.lock` file, etc.
 
 `poetry2nix` works by using Nix's `builtins.readFile` to read the raw
 `pyproject.toml` and `poetry.lock` files from disk, and then uses
-`builtins.fromTOML` parse the TOML into plain Nix values.  `poetry2nix` then
+`builtins.fromTOML` to parse the TOML into plain Nix values.  `poetry2nix` then
 uses this data to create Nix derivations for building all the dependencies, as well
 as the package itself.  Having this all done in Nix and only using Nix builtins
 means that `poetry2nix` does not need to use Import From Derivation (IFD).
@@ -78,11 +78,11 @@ Here's a rough explanation of how `callCabal2nix` works:
 3.  The derivation output from `haskellPackages.callPackage` in the previous
     step is built.  The output of this derivation is a normal Haskell library.
 
-IFD is necessary in this process in the first step.  In order to translate a
-`.cabal` file into a Nix expression, a Haskell program `cabal2nix` needs to be
+IFD is necessary in this process because of the first step.  In order to translate a
+`.cabal` file into a Nix expression, the Haskell program `cabal2nix` needs to be
 run.  `cabal2nix` uses the Haskell `Cabal` library internally.  It is necessary
 to internally rely on the `Cabal` library because `.cabal` files are relatively
-complicated.  Parsing a raw `.cabal` file directly from within Nix would be
+complicated.  Parsing a raw `.cabal` file directly with Nix would be
 quite difficult.
 
 After hearing that `poetry2nix` doesn't require IFD, I started thinking about
@@ -92,10 +92,10 @@ on IFD.
 ## `callCabal2nix` Without IFD
 
 In order to write a `callCabal2nix` function without relying on IFD, you would
-first need to read in a `.cabal` file with the Nix `builtins.readFile` function.
-You would then have to parse the raw `.cabal` file and pull out all the
-important information.  For building Haskell packages with Nix, the main information
-necessary from the `.cabal` file is the list of direct dependencies.
+first need to read in a `.cabal` file with the Nix `builtins.readFile` function,
+then parse the raw `.cabal` file and pull out all the important information.
+For building Haskell packages with Nix, the main information necessary from the
+`.cabal` file is the list of direct dependencies.
 
 The big difficulty in this process is parsing the `.cabal` file.  The `.cabal`
 file format is not a format that Nix natively understands (like JSON or TOML).
@@ -110,20 +110,74 @@ If you wanted to parse a `.cabal` file with Nix, you would need to write a
     [`nix-parsec`](https://github.com/nprindle/nix-parsec) that implements a
     [`parsec`](https://hackage.haskell.org/package/parsec)-like library in raw
     Nix.  This could potentially be used as a base, but it would still be
-    completely non-trivial to write a full `.cabal` parser in raw Nix.
+    non-trivial to write a full `.cabal` parser in raw Nix.
 
 I was thinking that if I was going to write a `callCabal2nix` function that
 doesn't use IFD, I would want to write it in a Haskell-like language that
-provides features like type-checking, algebraic data types, type classes, etc.
-Compiling this language would need to output Nix code, so that Nix can execute
-it.
+provides features like type-checking, algebraic data types, pattern-matching,
+type classes, etc.  This language would need to compiled to Nix code, so
+that Nix can execute it.
 
-TODO: write about how my first idea was PureScript and then I told Jonas.
+My first thought was to write a Nix backend for PureScript.  Users would be able
+to write PureScript code and compile it to Nix.  This seemed like somewhat of a
+silly idea, so I decided to share it with my friend, [Jonas Carpay](https://jonascarpay.com/).
 
-## Jonas
+## Enter Jonas
 
+Jonas is a Haskeller, he's interested in compilers and programming languages,
+and he's a heavy Nix user.  I thought that if there is anyone I could convince
+to work on this with me, it would be Jonas.
 
+After telling Jonas about this, he surprisingly didn't think this was a
+completely crazy idea.  After a little discussion, we came up with three
+potential approaches for making a Haskell-like language that compiles to Nix:
 
+1.  The alternative PureScript backend, as suggested above.
+
+1.  Using [GHC's Core language](https://serokell.io/blog/haskell-to-core)
+    as an intermediate representation, and translating that to Nix.
+
+    This approach would mean that the user would directly write a program in
+    Haskell.  Our compiler would use GHC to compile the Haskell program to GHC
+    Core.  Our compiler would then transpile this GHC Core to Nix.
+
+    The advantage of this approach is that the user would be able to use all of
+    Haskell's features, even things like GADTs, type families, etc.
+
+    The disadvantage of this approach is that neither of us had ever really worked
+    with GHC Core before.  We weren't sure how hard it would be to translate
+    Core into Nix, or what the consequences would be for the
+    [GHC Boot Libraries](https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history)
+    that are shipped with the compiler.  We weren't sure of all the primitives
+    exposed by GHC, or how these would translate to Nix.
+
+    I know there are compilers like [GHCJS](https://github.com/ghcjs/ghcjs) and
+    [Eta](https://eta-lang.org/) that attempt to hook into some step in GHC's
+    compilation pipeline and output to a separate language (JavaScript in the case
+    of GHCJS, and Java in the case of Eta).  But my image of these projects is
+    that they are quite complicated.
+
+1.  Write a DSL in Haskell that outputs Nix code when run.
+
+    Prior art here might be a project like [Clash](https://clash-lang.org/).
+
+    The disadvantage of this approach is that it would be somewhat difficult to
+    bootstrap the PureNix ecosystem.  We'd have to write our own standard library.
+    If we went with an alternative PureScript backend, we could just rely on
+    the PureScript standard library.
+
+We decided to go with writing an alternative PureScript backend, hoping it
+would be the quickest choice for actually writing a `callCabal2nix` function
+that doesn't use IFD.
+
+## Starting on PureNix
+
+Writing an [alternative PureScript backend](https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md)
+is surprisingly easy[^altbackend].
+
+[^altbackend]: TODO: assuming you are using the functional core and targeting a functional lang
+
+TODO: explain how to write an alternative backend, and how long it took us
 
 ## Conclusion
 
