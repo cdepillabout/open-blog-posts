@@ -54,7 +54,7 @@ that _outputs_ a `.nix` file.  If you build the derivation, the `.nix` that is c
 will end up in the Nix store.  Within the same run of Nix, you then
 _`import`_ this `.nix` file you just built.
 
-If you'd like to see a more detailed introduction to IFD, checkout the following
+If you would like to see a more detailed introduction to IFD, checkout the following
 two links:
 
 - <https://blog.hercules-ci.com/2019/08/30/native-support-for-import-for-derivation/>
@@ -134,8 +134,8 @@ potential approaches for making a Haskell-like language that compiles to Nix:
 
 1.  The alternative PureScript backend, as suggested above.
 
-1.  Using [GHC's Core language](https://serokell.io/blog/haskell-to-core)
-    as an intermediate representation, and translating that to Nix.
+1.  Use [GHC's Core language](https://serokell.io/blog/haskell-to-core)
+    as an intermediate representation, and translate that to Nix.
 
     This approach would mean that the user would directly write a program in
     Haskell.  Our compiler would use GHC to compile the Haskell program to GHC
@@ -203,9 +203,10 @@ main parts that do this conversion into Nix code:
 -   A definition of an [AST for Nix](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Expr.hs)
 -   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Convert.hs#L46-L51)
     for converting a PureScript `Module` into our Nix AST
--   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Print.hs) for taking our Nix AST and converting to raw Nix code
+-   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Print.hs)
+    for taking our Nix AST and converting to raw Nix code
 
-This is all there is to it.  PureScript's functional Core langauge translates
+This is all there is to it.  PureScript's functional Core language translates
 quite nicely to Nix, so we didn't have too much trouble here.  The only
 difficulty is how to encode PureScript's data types and pattern-matching to
 Nix.  Jonas came up with a
@@ -216,7 +217,7 @@ either of us had anticipated.  PureNix ends up working out really well in
 practice.  The Nix code it outputs is very similar to what you'd write by
 hand[^typeclasses].
 
-[^typeclasses]: Other than typeclasses and pattern matching.  Both of these can
+[^typeclasses]: Other than type classes and pattern matching.  Both of these can
     be a little verbose and hard to decipher in the output Nix code.
 
 With PureNix mostly finished, the next step was to port some PureScript
@@ -240,11 +241,11 @@ libraries to your new backend.
 
 After getting the PureNix compiler mostly working, we started on the process of
 porting some of the above libraries to PureNix.  This process mostly consists
-of forking the repository and rewriting all the JavaScript FFI files to Nix.
-This is somewhat annoying and time-consuming, but it is not particularly
-difficult.  The libraries that have been ported work well when called from Nix.
-It almost feels like magic being able to call functions written in PureScript
-from Nix.
+of forking the repository and rewriting all the JavaScript FFI files to Nix
+(the PureScript source files can mostly be used as-is).  This is somewhat
+annoying and time-consuming, but it is not particularly difficult.  The
+libraries that have been ported work well when called from Nix.  It almost
+feels like magic being able to call functions written in PureScript from Nix.
 
 We ended up porting about 25 libraries so far.  We worked on this
 on and off, and it ended up taking about 2 months.  See
