@@ -15,37 +15,31 @@ joke to something we are excited about.
 
 ## The Idea
 
-I was a mentor for [Summer of Nix 2021](https://summer.nixos.org/).  One of the
-nice things about Summer of Nix is that the organizers arranged for various
-people in the Nix community to give presentations about Nix-related topics.
-One of the presentations was from [@adisbladis](https://github.com/adisbladis)
-about [poetry2nix](https://github.com/nix-community/poetry2nix).
+This all started during [@adisbladis](https://github.com/adisbladis)'s
+ [Summer of Nix 2021](https://summer.nixos.org/) presentation about
+ [poetry2nix](https://github.com/nix-community/poetry2nix).
 
-`poetry2nix` is a Nix library for building Python packages that use
-[Poetry](https://python-poetry.org/) as a build system.  Poetry is a build tool
-like Haskell's `stack`/`cabal`, Rust's `cargo`, etc.  Python packages using
-Poetry must have a `pyproject.toml` file.  This file is similar to Haskell's
-`.cabal` file, Rust's `Cargo.toml` file, etc.  Here's an
-[example `pyproject.toml`](https://github.com/michaeloliverx/python-poetry-docker-example/blob/f7241bf6586e99c6c649eba36ca0efd935ea6316/pyproject.toml)
-file. If you look at this file, you can see many things you'd expect in a
-project configuration file, like dependencies and versions ranges.
+Briefly, Poetry is a Python build system, akin to Haskell's Cabal or Rust's
+Cargo.  Poetry is fairly unremarkable; you define your project in a
+`pyproject.toml` file (like Cabal's `.cabal` files, or Cargo's `Cargo.toml`),
+and when you first build your project it freezes all (transitive) dependencies
+in a `poetry.lock` file (like Cargo's `Cargo.lock`).
 
-Running Poetry produces a `poetry.lock` file, which locks all dependencies and
-transitive dependencies to specific versions.  This lock file also contains
-hashes for the source code of the dependency.  The `poetry.lock` file is in
-[TOML format](https://en.wikipedia.org/wiki/TOML).  This `poetry.lock` file is
-similar to Haskell's `stack.yaml.lock` file, Rust's `Cargo.lock` file, etc.
+It seems that that would make `poetry2nix` to Poetry what `cabal2nix` is to
+Cabal, or `cargo2nix` to Cargo, but `poetry2nix` is special in an important
+way.  The way `poetry2nix` works is it uses Nix's `builtins.readFile` to read
+the raw `pyproject.toml` and `poetry.lock` files from disk, and then uses
+`builtins.fromTOML` to parse the TOML into plain Nix values.  It then uses this
+data to create Nix derivations for building all the dependencies, as well as
+the package itself.
 
-`poetry2nix` works by using Nix's `builtins.readFile` to read the raw
-`pyproject.toml` and `poetry.lock` files from disk, and then uses
-`builtins.fromTOML` to parse the TOML into plain Nix values.  `poetry2nix` then
-uses this data to create Nix derivations for building all the dependencies, as well
-as the package itself.  Having this all done in Nix and only using Nix builtins
-means that `poetry2nix` does not need to use Import From Derivation (IFD).
-
-I was quite surprised hearing an explanation of how `poetry2nix` works.  I had
-thought that almost all languages needed to use IFD to take a native language
-lock file and transform it into a Nix derivation.
+What's special about this is not so much what it _does_, but what it _doesn't_
+do.  Because `poetry2nix` is implemented entirely in Nix and only uses Nix
+builtins, it never uses something called Import From Derivation
+(IFD).  Up until this presentation, I thought that all translation
+layers like `cabal2nix` used IFD to take a native language lock file and
+transform it into a Nix derivation. I hadn't even considered that you could get
+away with not doing that.
 
 ## Import From Derivation (IFD) and Haskell
 
