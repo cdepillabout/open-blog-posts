@@ -43,10 +43,13 @@ away with not doing that.
 
 ## Import From Derivation (IFD) and Haskell
 
-A quick explanation of how IFD works is that you first create a Nix derivation
-that _outputs_ a `.nix` file.  If you build the derivation, the `.nix` that is created
-will end up in the Nix store.  Within the same run of Nix, you then
-_`import`_ this `.nix` file you just built.
+A quick explanation of IFD:
+
+1.  You create a Nix derivation that _outputs_ a `.nix` file.
+2.  You build this derivation, and the `.nix` file that is created end up in
+    the Nix store (since it is a build output).
+3.  Within the same run of Nix, you _`import`_ the `.nix` file from its path in
+    the Nix store.
 
 If you would like to see a more detailed introduction to IFD, checkout the following
 two links:
