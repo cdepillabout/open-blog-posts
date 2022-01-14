@@ -236,20 +236,51 @@ libraries to your new backend.
     [base](https://hackage.haskell.org/package/base) as the
     standard library.  Sometimes people think of the full set of
     [GHC Boot Libraries](https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history)
-    as the standard library.
+    as the standard library, since these are all shipped with the compiler.
 
 After getting the PureNix compiler mostly working, we started on the process of
 porting some of the above libraries to PureNix.  This process mostly consists
 of forking the repository and rewriting all the JavaScript FFI files to Nix.
 This is somewhat annoying and time-consuming, but it is not particularly
-difficult.  We ended up porting about 25 libraries so far.  We worked on this
-on and off.  This ended up taking about 2 months.  See
-[this issue](https://github.com/purenix-org/purenix/issues/37) for the status
-of the porting process for the remaining.  Feel free to jump in and help!
+difficult.  The libraries that have been ported work well when called from Nix.
+It almost feels like magic being able to call functions written in PureScript
+from Nix.
 
-With 
+We ended up porting about 25 libraries so far.  We worked on this
+on and off, and it ended up taking about 2 months.  See
+[this issue](https://github.com/purenix-org/purenix/issues/37) for the status
+of the porting process for the remaining libraries.  Feel free to jump in and help!
+
+With some libraries ported, the next step was to actually start writing a
+version of `callCabal2Nix` that doesn't need IFD!
+
+## No IFD
+
+With a portion of the PureScript standard library available, writing a
+[proof-of-concept `.cabal` parser](https://github.com/cdepillabout/cabal2nixWithoutIFD)
+was straight-forward.  This project currently only parses a small
+subset of the full `.cabal` file syntax, but this approach should be extendable
+to work with a full `.cabal` file.  This project accomplishes the goal of
+parsing a `.cabal` file within Nix, without using IFD.  This whole process ends
+up being quite similar to `poetry2nix`.
+
+I plan to write a blog post about `cabal2nixWithoutIFD` in the future, but if
+you're interested, checkout the
+[`README.md`](https://github.com/cdepillabout/cabal2nixWithoutIFD) in the repo.
 
 ## Conclusion
+
+While PureNix started out half as a joke, it ended up working out much better
+than anticipated.  This is mostly due to the similarity between PureScript's
+functional Core language and Nix.  PureScript's standard libraries also work
+well when compiled to Nix.  It is quite nice to effectively be writing Nix,
+but using things like type-checking, algebraic data types, pattern-matching,
+and type classes.  Relying on PureScript's standard libraries for writing Nix
+code is quite convenient, given that PureScript's standard libraries provide
+quite a lot of features.
+
+The whole PureNix project ended up working out really well, and we hope that
+other people will be able to find a use for PureNix as well.
 
 *This post is the third post in a [series about PureNix](./2022-01-03-purenix).
 The previous post is about
