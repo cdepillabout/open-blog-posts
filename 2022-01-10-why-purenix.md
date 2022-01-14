@@ -129,7 +129,7 @@ and he's a heavy Nix user.  I thought that if there is anyone I could convince
 to work on this with me, it would be Jonas.
 
 After telling Jonas about this, he surprisingly didn't think this was a
-completely crazy idea.  After a little discussion, we came up with three
+crazy idea.  After a little discussion, we came up with three
 potential approaches for making a Haskell-like language that compiles to Nix:
 
 1.  The alternative PureScript backend, as suggested above.
@@ -162,7 +162,7 @@ potential approaches for making a Haskell-like language that compiles to Nix:
     Prior art here might be a project like [Clash](https://clash-lang.org/).
 
     The disadvantage of this approach is that it would be somewhat difficult to
-    bootstrap the PureNix ecosystem.  We'd have to write our own standard library.
+    bootstrap the PureNix ecosystem.  We would have to write our own standard library.
     If we went with an alternative PureScript backend, we could just rely on
     the PureScript standard library.
 
@@ -173,11 +173,81 @@ that doesn't use IFD.
 ## Starting on PureNix
 
 Writing an [alternative PureScript backend](https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md)
-is surprisingly easy[^altbackend].
+is surprisingly easy[^altbackend].  This section gives a short introduction to
+what is necessary for writing an alternative backend.
 
-[^altbackend]: TODO: assuming you are using the functional core and targeting a functional lang
+[^altbackend]: This is assuming you are using PureScript's
+    [functional Core language](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreFn-Module.html),
+    and you are targeting a dynamically-typed functional language (like Nix).
+    If your target language is statically-typed, or an imperative language,
+    my guess is that writing an alternative PureScript backend would be more
+    difficult.  Although there are quite a few alternative PureScript backends for
+    [statically-typed, imperative languages](https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md).
 
-TODO: explain how to write an alternative backend, and how long it took us
+The PureScript compiler defines two separate Core languages: a
+[functional](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreFn.html)
+Core language and an
+[imperative](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreImp.html)
+Core language.  There is a flag you can pass to the PureScript compiler to
+have it output the functional Core language instead of JavaScript code
+when compiling.  Spago does this for you internally when you specify
+a [`backend`](https://github.com/purescript/spago#use-alternate-backends-to-compile-to-go-c-kotlin-etc).
+See the [Getting Started Guide](https://github.com/purenix-org/purenix/blob/main/docs/quick-start.md)
+for PureNix for a little more information about setting a `backend`.
+
+An alternative PureScript backend is responsible for taking a PureScript
+[`Module`](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreFn-Module.html)
+and converting it into a module in your target language.  PureNix has three
+main parts that do this conversion into Nix code:
+
+-   A definition of an [AST for Nix](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Expr.hs)
+-   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Convert.hs#L46-L51)
+    for converting a PureScript `Module` into our Nix AST
+-   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Print.hs) for taking our Nix AST and converting to raw Nix code
+
+This is all there is to it.  PureScript's functional Core langauge translates
+quite nicely to Nix, so we didn't have too much trouble here.  The only
+difficulty is how to encode PureScript's data types and pattern-matching to
+Nix.  Jonas came up with a
+[good solution](https://jonascarpay.com/posts/2021-11-08-nix-adts.html) for this.
+
+Writing PureNix only took about a month.  The end result was much better than
+either of us had anticipated.  PureNix ends up working out really well in
+practice.  The Nix code it outputs is very similar to what you'd write by
+hand[^typeclasses].
+
+[^typeclasses]: Other than typeclasses and pattern matching.  Both of these can
+    be a little verbose and hard to decipher in the output Nix code.
+
+With PureNix mostly finished, the next step was to port some PureScript
+standard libraries over to be used with PureNix.
+
+## Porting PureScript Libraries
+
+Unlike a language like Haskell or Python, PureScript doesn't have a big
+"standard library"[^haskell-stdlib].  However, there is a set of about 60 PureScript libraries
+maintained under the [`purescript`](https://github.com/purescript) organization
+on GitHub (all the repositories with the `purescript-` prefix).  This set of
+libraries is often thought of as the "standard library" for PureScript.  When
+writing an alternative backend, the first step is porting some of these
+libraries to your new backend.
+
+[^haskell-stdlib]: In Haskell, sometimes people think of
+    [base](https://hackage.haskell.org/package/base) as the
+    standard library.  Sometimes people think of the full set of
+    [GHC Boot Libraries](https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history)
+    as the standard library.
+
+After getting the PureNix compiler mostly working, we started on the process of
+porting some of the above libraries to PureNix.  This process mostly consists
+of forking the repository and rewriting all the JavaScript FFI files to Nix.
+This is somewhat annoying and time-consuming, but it is not particularly
+difficult.  We ended up porting about 25 libraries so far.  We worked on this
+on and off.  This ended up taking about 2 months.  See
+[this issue](https://github.com/purenix-org/purenix/issues/37) for the status
+of the porting process for the remaining.  Feel free to jump in and help!
+
+With 
 
 ## Conclusion
 
