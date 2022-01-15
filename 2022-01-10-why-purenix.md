@@ -35,11 +35,10 @@ the package itself.
 
 What's special about this is not so much what it _does_, but what it _doesn't_
 do.  Because `poetry2nix` is implemented entirely in Nix and only uses Nix
-builtins, it never uses something called Import From Derivation
-(IFD).  Up until this presentation, I thought that all translation
-layers like `cabal2nix` used IFD to take a native language lock file and
-transform it into a Nix derivation. I hadn't even considered that you could get
-away with not doing that.
+builtins, it never uses Import From Derivation (IFD).  Up until this
+presentation, I thought that all translation layers like `cabal2nix` used IFD
+to take a native language lock file and transform it into a Nix derivation. I
+hadn't even considered that you could get away with not doing that.
 
 ## Import From Derivation (IFD) and Haskell
 
@@ -51,36 +50,18 @@ A quick explanation of IFD:
 3.  Within the same run of Nix, you _`import`_ the `.nix` file from its path in
     the Nix store.
 
-If you would like to see a more detailed introduction to IFD, checkout the following
-two links:
+Checkout the following two links for a more detailed introduction of IFD:
 
 - <https://blog.hercules-ci.com/2019/08/30/native-support-for-import-for-derivation/>
 - <https://nixos.wiki/wiki/Import_From_Derivation>
 
 There is a widely-used function in Nixpkgs that uses IFD to build a Haskell package:
 [`haskellPackages.callCabal2nix`](https://github.com/NixOS/nixpkgs/blob/6a7bafcb0fd068716ca6659e59d197044c41a9a7/pkgs/development/haskell-modules/make-package-set.nix#L220).
-Here's a rough explanation of how `callCabal2nix` works:
-
-1.  A derivation is created that internally calls
-    [`cabal2nix`](https://github.com/NixOS/cabal2nix).  `cabal2nix` reads in a
-    input `.cabal` file and outputs a `.nix` file.  This `.nix` file is a
-    derivation that can be built with the
-    [default Haskell builder](https://github.com/NixOS/nixpkgs/blob/6a7bafcb0fd068716ca6659e59d197044c41a9a7/pkgs/development/haskell-modules/generic-builder.nix)
-    in Nixpkgs.  `cabal2nix` uses the [`Cabal`](https://hackage.haskell.org/package/Cabal)
-    Haskell library internally to parse the input `.cabal` file and get data
-    out of it (in order to translate it to raw Nix code).
-2.  Building the derivation from the previous step outputs a `.nix` file.
-    This `.nix` file is _imported_ and passed to
-    [`haskellPackages.callPackage`](https://github.com/NixOS/nixpkgs/blob/6a7bafcb0fd068716ca6659e59d197044c41a9a7/pkgs/development/haskell-modules/make-package-set.nix#L118).
-3.  The derivation output from `haskellPackages.callPackage` in the previous
-    step is built.  The output of this derivation is a normal Haskell library.
-
-IFD is necessary in this process because of the first step.  In order to translate a
-`.cabal` file into a Nix expression, the Haskell program `cabal2nix` needs to be
-run.  `cabal2nix` uses the Haskell `Cabal` library internally.  It is necessary
-to internally rely on the `Cabal` library because `.cabal` files are relatively
-complicated.  Parsing a raw `.cabal` file directly with Nix would be
-quite difficult.
+Roughly, `callCabal2nix` works by running a Haskell program to parse an input
+`.cabal` file and pull out all necessary information for building the Haskell
+package with Nix.  IFD is necessary in this process because the only library
+for parsing a `.cabal` file is written in Haskell.  Parsing a raw `.cabal` file
+directly within Nix would be quite difficult.
 
 After hearing that `poetry2nix` doesn't require IFD, I started thinking about
 what would be necessary to write a `callCabal2nix` function that doesn't rely
@@ -90,18 +71,12 @@ on IFD.
 
 In order to write a `callCabal2nix` function without relying on IFD, you would
 first need to read in a `.cabal` file with the Nix `builtins.readFile` function,
-then parse the raw `.cabal` file and pull out all the important information.
-For building Haskell packages with Nix, the main information necessary from the
-`.cabal` file is the list of direct dependencies.
+then parse the raw `.cabal` file and pull out all the important information
+from within Nix.
 
-The big difficulty in this process is parsing the `.cabal` file.  The `.cabal`
-file format is not a format that Nix natively understands (like JSON or TOML).
-The only widely-used library for parsing `.cabal` files is
-[`Cabal`](https://hackage.haskell.org/package/Cabal), and this is only
-available as a Haskell package.
-
-If you wanted to parse a `.cabal` file with Nix, you would need to write a
-`.cabal` parser in Nix itself.  This would be quite a challenge[^nix-parsec].
+The big difficulty in this process is parsing the `.cabal` file.  If you wanted
+to parse a `.cabal` file with Nix, you would need to write a `.cabal` parser in
+Nix itself.  This would be quite a challenge[^nix-parsec].
 
 [^nix-parsec]: There is a Nix library called
     [`nix-parsec`](https://github.com/nprindle/nix-parsec) that implements a
@@ -156,10 +131,10 @@ potential approaches for making a Haskell-like language that compiles to Nix:
 
 1.  Write a DSL in Haskell that outputs Nix code when run.
 
-    Prior art here might be a project like [Clash](https://clash-lang.org/).
+    Prior art here might be a project like [hnix](https://github.com/haskell-nix/hnix).
 
     The disadvantage of this approach is that it would be somewhat difficult to
-    bootstrap the PureNix ecosystem.  We would have to write our own standard library.
+    bootstrap our new ecosystem.  We would have to write our own standard library.
     If we went with an alternative PureScript backend, we could just rely on
     the PureScript standard library.
 
@@ -181,21 +156,24 @@ what is necessary for writing an alternative backend.
     difficult.  Although there are quite a few alternative PureScript backends for
     [statically-typed, imperative languages](https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md).
 
-The PureScript compiler defines two separate Core languages: a
+The PureScript compiler defines a
 [functional](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreFn.html)
-Core language and an
-[imperative](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreImp.html)
-Core language.  There is a flag you can pass to the PureScript compiler to
-have it output the functional Core language instead of JavaScript code
-when compiling.  Spago does this for you internally when you specify
-a [`backend`](https://github.com/purescript/spago#use-alternate-backends-to-compile-to-go-c-kotlin-etc).
-See the [Getting Started Guide](https://github.com/purenix-org/purenix/blob/main/docs/quick-start.md)
-for PureNix for a little more information about setting a `backend`.
-
-An alternative PureScript backend is responsible for taking a PureScript
+Core language[^multicore].  An alternative PureScript backend is responsible for taking a
+functional Core
 [`Module`](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreFn-Module.html)
 and converting it into a module in your target language.  PureNix has three
 main parts that do this conversion into Nix code:
+
+[^multicore]: The PureScript compiler actually defines two separate Core languages: a
+    [functional](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreFn.html)
+    Core language and an
+    [imperative](https://hackage.haskell.org/package/purescript-0.13.8/docs/Language-PureScript-CoreImp.html)
+    Core language.  There is a flag you can pass to the PureScript compiler to
+    have it output the functional Core language instead of JavaScript code
+    when compiling.  Spago does this for you internally when you specify
+    a [`backend`](https://github.com/purescript/spago#use-alternate-backends-to-compile-to-go-c-kotlin-etc).
+    See the [Getting Started Guide](https://github.com/purenix-org/purenix/blob/main/docs/quick-start.md)
+    for PureNix for a little more information about setting a `backend`.
 
 -   A definition of an [AST for Nix](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Expr.hs)
 -   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Convert.hs#L46-L51)
@@ -214,11 +192,11 @@ either of us had anticipated.  PureNix ends up working out really well in
 practice.  The Nix code it outputs is very similar to what you'd write by
 hand[^typeclasses].
 
-[^typeclasses]: Other than type classes and pattern matching.  Both of these can
+[^typeclasses]: Well, other than type classes and pattern matching.  Both of these can
     be a little verbose and hard to decipher in the output Nix code.
 
-With PureNix mostly finished, the next step was to port some PureScript
-standard libraries over to be used with PureNix.
+With the PureNix compiler mostly finished, the next step was to port some
+PureScript standard libraries over to be used with PureNix.
 
 ## Porting PureScript Libraries
 
