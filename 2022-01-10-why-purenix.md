@@ -181,9 +181,9 @@ main parts that do this conversion into Nix code:
 -   A [function](https://github.com/purenix-org/purenix/blob/b6bf56a20b26b9744b207bed75268c09dd611b79/src/PureNix/Print.hs)
     for taking our Nix AST and converting to raw Nix code
 
-This is all there is to it.  PureScript's functional Core language translates
+That's all there is to it.  PureScript's functional Core language translates
 quite nicely to Nix, so we didn't have too much trouble here.  The only
-difficulty is how to encode PureScript's data types and pattern-matching to
+difficulty was how to encode PureScript's data types and pattern-matching in
 Nix.  Jonas came up with a
 [good solution](https://jonascarpay.com/posts/2021-11-08-nix-adts.html) for this.
 
@@ -192,8 +192,9 @@ either of us had anticipated.  PureNix ends up working out really well in
 practice.  The Nix code it outputs is very similar to what you'd write by
 hand[^typeclasses].
 
-[^typeclasses]: Well, other than type classes and pattern matching.  Both of these can
-    be a little verbose and hard to decipher in the output Nix code.
+[^typeclasses]: Well, other than type classes and pattern matching.  Both of
+    these can be a little verbose in the output Nix code.  They can be a hard to
+    decipher the first time you see them.
 
 With the PureNix compiler mostly finished, the next step was to port some
 PureScript standard libraries over to be used with PureNix.
@@ -235,10 +236,10 @@ version of `callCabal2Nix` that doesn't need IFD!
 With a portion of the PureScript standard library available, writing a
 [proof-of-concept `.cabal` parser](https://github.com/cdepillabout/cabal2nixWithoutIFD)
 was straight-forward.  This project currently only parses a small
-subset of the full `.cabal` file syntax, but this approach should be extendable
-to work with a full `.cabal` file.  This project accomplishes the goal of
-parsing a `.cabal` file within Nix, without using IFD.  This whole process ends
-up being quite similar to `poetry2nix`.
+subset of the full `.cabal` file syntax, but in theory this approach should be
+extendable to work with a full `.cabal` file.  This project accomplishes the
+goal of parsing a `.cabal` file within Nix, without using IFD.  This whole
+process ends up being quite similar to `poetry2nix`.
 
 I plan to write a blog post about `cabal2nixWithoutIFD` in the future, but if
 you're interested, checkout the
