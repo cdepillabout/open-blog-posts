@@ -22,12 +22,12 @@ This all started during [@adisbladis](https://github.com/adisbladis)'s
 Briefly, Poetry is a Python build system, akin to Haskell's Cabal or Rust's
 Cargo.  Poetry is fairly unremarkable; you define your project in a
 `pyproject.toml` file (like Cabal's `.cabal` files, or Cargo's `Cargo.toml`),
-and when you first build your project it freezes all (transitive) dependencies
+and when you first build your project, it freezes all (transitive) dependencies
 in a `poetry.lock` file (like Cargo's `Cargo.lock`).
 
-It seems that that would make `poetry2nix` to Poetry what `cabal2nix` is to
-Cabal, or `cargo2nix` to Cargo, but `poetry2nix` is special in an important
-way.  The way `poetry2nix` works is it uses Nix's `builtins.readFile` to read
+It seems that would make `poetry2nix` to Poetry what `cabal2nix` is to
+Cabal (or `cargo2nix` is to Cargo), but `poetry2nix` is special in an important
+way.  `poetry2nix` works by using Nix's `builtins.readFile` to read
 the raw `pyproject.toml` and `poetry.lock` files from disk, and then uses
 `builtins.fromTOML` to parse the TOML into plain Nix values.  It then uses this
 data to create Nix derivations for building all the dependencies, as well as
@@ -38,7 +38,7 @@ do.  Because `poetry2nix` is implemented entirely in Nix and only uses Nix
 builtins, it never uses Import From Derivation (IFD).  Up until this
 presentation, I thought that all translation layers like `cabal2nix` used IFD
 to take a native language lock file and transform it into a Nix derivation. I
-hadn't even considered that you could get away with not doing that.
+hadn't even considered that you could get away with not doing this.
 
 ## Import From Derivation (IFD) and Haskell
 
@@ -97,10 +97,10 @@ silly idea, so I decided to share it with my friend, [Jonas Carpay](https://jona
 ## Enter Jonas
 
 Jonas is a Haskeller, he's interested in compilers and programming languages,
-and he's a heavy Nix user.  I thought that if there is anyone I could convince
-to work on this with me, it would be Jonas.
+and he's a heavy Nix user.  I thought that if there would be anyone I could
+convince to work on this with me, it would be Jonas.
 
-After telling Jonas about this, he surprisingly didn't think this was a
+After telling Jonas about this, he surprisingly didn't think it was a
 crazy idea.  After a little discussion, we came up with three
 potential approaches for making a Haskell-like language that compiles to Nix:
 
@@ -125,7 +125,7 @@ potential approaches for making a Haskell-like language that compiles to Nix:
 
     I know there are compilers like [GHCJS](https://github.com/ghcjs/ghcjs) and
     [Eta](https://eta-lang.org/) that attempt to hook into some step in GHC's
-    compilation pipeline and output to a separate language (JavaScript in the case
+    compilation pipeline and output a separate language (JavaScript in the case
     of GHCJS, and Java in the case of Eta).  But my image of these projects is
     that they are quite complicated.
 
@@ -187,10 +187,16 @@ difficulty was how to encode PureScript's data types and pattern-matching in
 Nix.  Jonas came up with a
 [good solution](https://jonascarpay.com/posts/2021-11-08-nix-adts.html) for this.
 
-Writing PureNix only took about a month.  The end result was much better than
-either of us had anticipated.  PureNix ends up working out really well in
-practice.  The Nix code it outputs is very similar to what you'd write by
-hand[^typeclasses].
+Writing PureNix only took about a month.  It is currently under 1,000 lines of code.[^lines]
+The end result was much better than either of us had anticipated.  PureNix ends
+up working out really well in practice.  The Nix code it outputs is very
+similar to what you'd write by hand[^typeclasses].
+
+[^lines]: Although there are definitely
+    [still](https://github.com/purenix-org/purenix/issues/39)
+    [some](https://github.com/purenix-org/purenix/issues/36)
+    [things](https://github.com/purenix-org/purenix/issues/35)
+    we should implement or fix.
 
 [^typeclasses]: Well, other than type classes and pattern matching.  Both of
     these can be a little verbose in the output Nix code.  They can be a hard to
@@ -211,12 +217,12 @@ libraries to your new backend.
 
 [^haskell-stdlib]: In Haskell, sometimes people think of
     [base](https://hackage.haskell.org/package/base) as the
-    standard library.  Sometimes people think of the full set of
+    standard library.  On the other hand, sometimes people think of the full set of
     [GHC Boot Libraries](https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history)
     as the standard library, since these are all shipped with the compiler.
 
 After getting the PureNix compiler mostly working, we started on the process of
-porting some of the above libraries to PureNix.  This process mostly consists
+porting some of the above libraries to PureNix.  This process consists
 of forking the repository and rewriting all the JavaScript FFI files to Nix
 (the PureScript source files can mostly be used as-is).  This is somewhat
 annoying and time-consuming, but it is not particularly difficult.  The
@@ -226,7 +232,7 @@ feels like magic being able to call functions written in PureScript from Nix.
 We ended up porting about 25 libraries so far.  We worked on this
 on and off, and it ended up taking about 2 months.  See
 [this issue](https://github.com/purenix-org/purenix/issues/37) for the status
-of the porting process for the remaining libraries.  Feel free to jump in and help!
+of the remaining libraries.  Feel free to jump in and help!
 
 With some libraries ported, the next step was to actually start writing a
 version of `callCabal2Nix` that doesn't need IFD!
@@ -257,7 +263,7 @@ code is quite convenient, given that PureScript's standard libraries provide
 quite a lot of features.
 
 The whole PureNix project ended up working out really well, and we hope that
-other people will be able to find a use for PureNix as well.
+other people will also be able to find a use for PureNix.
 
 *This post is the third post in a [series about PureNix](./2022-01-03-purenix).
 The previous post is about
