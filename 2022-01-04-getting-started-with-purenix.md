@@ -43,7 +43,8 @@ Haskell's `stack` or `cabal`, Rust's `cargo`, etc.
 One interesting feature of the PureScript compiler and Spago is that there is
 good support for switching out the backend code generator.  The code generator
 built into the main PureScript compiler is for JavaScript, but there are
-alternative code generators for other languages.  PureNix is an alternative
+[alternative](https://github.com/purescript/documentation/blob/master/ecosystem/Alternate-backends.md)
+code generators for other languages.  PureNix is an alternative
 backend code generator for Nix.
 
 ## PureNix
