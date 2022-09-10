@@ -10,7 +10,7 @@ I put together an explanation of how to setup LXD on a NixOS host with a NixOS g
 <https://discourse.nixos.org/t/howto-setup-lxd-on-nixos-with-nixos-guest-using-unmanaged-bridge-network-interface/21591?u=cdepillabout>
 
 
-<!-- Here's the full text of the Discourse post incase if ever gets taken down or something. -->
+<!-- Here's the full text of the Discourse post in case if ever gets taken down or something. -->
 
 <!--
 
