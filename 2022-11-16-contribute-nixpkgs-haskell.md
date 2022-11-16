@@ -72,7 +72,7 @@ this is a problem, it fails for me too!", or "I've tried building the
 derivation from this PR and I can confirm it works!"
 
 After reviewing even 5 to 10 Haskell PRs, you should have a good idea of the
-common sources of problems, and how we fix them.  You'll be able to make
+common sources of problems, and how we fix them.[^2]  You'll be able to make
 suggestions to new PRs without us needing to be involved. It is so much easier
 for us to just be able to click the "Merge" button on GitHub than having to go
 back and forth on a PR.
@@ -127,3 +127,6 @@ join us on Matrix, or dive in and start sending PRs!
         these are finished, end-users are easily able to use new
         Haskell packages and compilers.
     1. We restart this process.
+
+[^2]: We don't currently have a guide for how to fix a given broken Haskell package, but
+    watching incoming PRs is a really good way to figure out how to unbreak packages.
