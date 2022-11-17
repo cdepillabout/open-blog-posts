@@ -17,7 +17,7 @@ This post lists a few different ways to get involved, from easiest to hardest.
 
 The easiest way to get involved is to join the Matrix channel for the Haskell
 infrastructure in Nixpkgs:
-[#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).  Here you can
+[#haskell:nixos.org](https://matrix.to/#/%23haskell:nixos.org).  Here you can
 talk to the Haskell maintainers in Nixpkgs, as well as other users.  This is a
 great place to ask casual questions.
 
