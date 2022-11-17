@@ -17,9 +17,9 @@ This post lists a few different ways to get involved, from easiest to hardest.
 
 The easiest way to get involved is to join the Matrix channel for the Haskell
 infrastructure in Nixpkgs:
-[#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).  Here you can talk
-to the Haskell maintainers in Nixpkgs, as well as other users.  This is a great place
-to ask casual questions.
+[#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org).  Here you can
+talk to the Haskell maintainers in Nixpkgs, as well as other users.  This is a
+great place to ask casual questions.
 
 ## Method 2: Answer Haskell- and Nix-related Questions on Other Sites
 
@@ -28,7 +28,7 @@ websites. The maintainers in Nixpkgs are not always watching these other
 websites, so it is very helpful for other members of the community to answer
 questions.
 
-Non-exhaustive list of other sites where people frequently ask questions:
+Here's a non-exhaustive list of other sites where people frequently ask questions:
 
 - [NixOS Discourse](https://discourse.nixos.org/)
 - [Unofficial NixOS Discord Server](https://discord.com/invite/RbvHtGa)
@@ -60,11 +60,11 @@ You don't have to be the original author of the package.
 
 ## Method 4: Watch the `haskell` Label in Nixpkgs
 
-Haskell-related issues and PRs get tagged with the [`haskell`
-label](https://github.com/NixOS/nixpkgs/labels/6.topic%3A%20haskell) in
-Nixpkgs.  Responding to issues and PRs can take a lot of work, so we
-really appreciate when other users help with responding to issues, or do
-reviews of PRs.
+Haskell-related issues and PRs get tagged with the
+[`haskell` label](https://github.com/NixOS/nixpkgs/labels/6.topic%3A%20haskell)
+in Nixpkgs.  Responding to issues and PRs can take a lot of work, so we really
+appreciate when other users help with responding to issues, or do reviews of
+PRs.
 
 Even if you feel like you're not knowledgable enough with how the Haskell ecosystem
 works in Nixpkgs, we still really appreciate comments like "I can confirm
@@ -90,20 +90,20 @@ documented in
 [`HACKING.md`](https://github.com/NixOS/nixpkgs/blob/b457130e8a21608675ddf12c7d85227b22a27112/pkgs/development/haskell-modules/HACKING.md)
 in the Nixpkgs repo.
 
-We have a [daily
-build-report](https://github.com/cdepillabout/nix-haskell-updates-status) that
-shows which packages are broken.  We always appreciate when people watch this
-build report, and send fixes for broken packages.  This _really_ helps us be
-able to merge the `haskell-updates` branch faster, and get the most up-to-date
-libraries and compilers out to our users.  If you've ever heard someone
-complain about Nixpkgs not having the latest GHC, you should really point them
-to this blog post and ask them to help out![^1]
+We have a
+[daily build-report](https://github.com/cdepillabout/nix-haskell-updates-status)
+that shows which packages are broken.  We always appreciate when people watch
+this build report, and send fixes for broken packages.  This _really_ helps us
+be able to merge the `haskell-updates` branch faster, and get the most
+up-to-date libraries and compilers out to our users.  If you've ever heard
+someone complain about Nixpkgs not having the latest GHC, you should really
+point them to this blog post and ask them to help out![^1]
 
 In theory, all you should need to do is watch this daily build-report, but in
-practice, you will likely also want to watch the [`haskell-updates` jobset on
-Hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates#tabs-errors), and
-fix any evaluation errors that are present.  These also prevent us from merging
-in the `haskell-updates` branch to `master`.
+practice, you will likely also want to watch the
+[`haskell-updates` jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates#tabs-errors),
+and fix any evaluation errors that are present.  These also prevent us from
+merging in the `haskell-updates` branch to `master`.
 
 ## Conclusion
 
@@ -119,7 +119,8 @@ join us on Matrix, or dive in and start sending PRs!
     1. We ask that all Haskell-related changes in Nixpkgs to be sent as PRs to the
         `haskell-updates` branch. This includes things like new GHC versions.
         We review PRs to the `haskell-updates` branch and merge them in.
-    1. The Hydra [jobset for `haskell-updates`](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)
+    1. The Hydra
+        [jobset for `haskell-updates`](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates)
         builds all Haskell-related packages.  We can merge the
         `haskell-updates` branch into `master` as soon as CI is clean.
     1. After merging `haskell-updates` into `master`, the various Hydra jobsets for
