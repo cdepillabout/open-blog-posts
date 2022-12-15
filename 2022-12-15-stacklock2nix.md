@@ -40,3 +40,4 @@ various Haskell projects.  Check out each one for a realistic example of using
 
 [^1]: haskell.nix of course has a bunch of
     [good points](https://github.com/cdepillabout/stacklock2nix#stacklock2nix-vs-haskellnix) as well.
+
