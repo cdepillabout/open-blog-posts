@@ -1,6 +1,6 @@
 ------------------------------------------------------
 title: stacklock2nix
-summary: Easily use Nix to build a Haskell package with a `stack.yaml.lock` file
+summary: Easily use Nix to build a Haskell package with a stack.yaml.lock file
 tags: nixos, haskell
 draft: false
 ------------------------------------------------------

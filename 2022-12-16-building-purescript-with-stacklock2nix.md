@@ -1,6 +1,6 @@
 ------------------------------------------------------
 title: Building the PureScript Compiler with stacklock2nix
-summary: Use `stacklock2nix` to build the PureScript compiler.
+summary: Use stacklock2nix to build the PureScript compiler.
 tags: nixos, haskell, purescript
 draft: false
 ------------------------------------------------------
@@ -11,11 +11,12 @@ draft: false
 <!-- The next post is about
 [who would find PureNix easy to use](./2022-01-05-who-would-like-purenix). -->
 
-This post uses `stacklock2nix` to build the PureScript compiler with Nix.
-PureScript is a non-trivial Haskell project, but it is not _too_ complicated.
-It is good as an initial example of using `stacklock2nix`.
+This post uses [`stacklock2nix`](https://github.com/cdepillabout/stacklock2nix)
+to build the PureScript compiler with Nix. PureScript is a non-trivial Haskell
+project, but it is not _too_ complicated. It is good as an initial example of
+using `stacklock2nix`.
 
-This following commit adds a `flake.nix` to the PureScript repo that can be
+The following commit adds a `flake.nix` to the PureScript repo that can be
 used to build with Nix:
 
 <https://github.com/cdepillabout/purescript/commit/435e49fe239920839397ced1be155e4001df060f>
