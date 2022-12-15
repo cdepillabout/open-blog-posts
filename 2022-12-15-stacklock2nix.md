@@ -29,7 +29,10 @@ I've decided to do a series of blog posts where I use `stacklock2nix` to package
 various Haskell projects.  Check out each one for a realistic example of using
 `stacklock2nix`:
 
-1. `purescript` (coming soon)
+1. [`purescript`](2022-12-16-building-purescript-with-stacklock2nix)
+
+    This post introduces an easy way to build a straight-forward Haskell
+    project with `stacklock2nix`.  This is good for beginners.
 
 2. `dhall` (coming soon)
 
