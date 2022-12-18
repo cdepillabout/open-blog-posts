@@ -19,7 +19,7 @@ using `stacklock2nix`.
 The following commit adds a `flake.nix` to the PureScript repo that can be
 used to build with Nix:
 
-<https://github.com/cdepillabout/purescript/commit/435e49fe239920839397ced1be155e4001df060f>
+<https://github.com/cdepillabout/purescript/commit/b78324382f44e7d75ff5175e535df33a39f2e62e>
 
 This `flake.nix` is based on the
 [easy example](https://github.com/cdepillabout/stacklock2nix/tree/main/my-example-haskell-lib-easy)
