@@ -5,8 +5,10 @@ tags: nixos, haskell, purescript
 draft: false
 ------------------------------------------------------
 
-*This post is the first post in a
+*This is the first post in a
 [series about `stacklock2nix`](./2022-12-15-stacklock2nix).*
+The next post is about
+[building Dhall with `stacklock2nix`](./2022-12-20-building-dhall-with-stacklock2nix).
 
 <!-- The next post is about
 [who would find PureNix easy to use](./2022-01-05-who-would-like-purenix). -->
@@ -29,7 +31,7 @@ This post explains how to use this `flake.nix`.
 
 ## What can you do with this `flake.nix`?
 
-First, lets clone clone the above code locally with the following commands:
+First, lets clone the above code locally with the following commands:
 
 ```console
 $ git clone git@github.com:cdepillabout/purescript.git

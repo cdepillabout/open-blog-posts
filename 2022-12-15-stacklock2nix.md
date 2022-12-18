@@ -20,7 +20,8 @@ I decided to write a Nix library called
 [`stacklock2nix`](https://github.com/cdepillabout/stacklock2nix).  It generates
 a Nixpkgs-compatible Haskell overlay from a `stack.yaml` and `stack.yaml.lock`
 file.  This allows you to easily build a Haskell project with Nix (as long as
-you have a `stack.yaml` and `stack.yaml.lock` file).
+you have a `stack.yaml` and `stack.yaml.lock` file).  It allows you to use
+your `stack.yaml` file as a single-source-of-truth for Haskell dependency versions[^2].
 
 You can find usage instructions, as well as two example projects in the
 [README](https://github.com/cdepillabout/stacklock2nix#readme).
@@ -29,12 +30,16 @@ I've decided to do a series of blog posts where I use `stacklock2nix` to package
 various Haskell projects.  Check out each one for a realistic example of using
 `stacklock2nix`:
 
-1. [`purescript`](2022-12-16-building-purescript-with-stacklock2nix)
+1. [`purescript`](./2022-12-16-building-purescript-with-stacklock2nix)
 
     This post introduces an easy way to build a straight-forward Haskell
     project with `stacklock2nix`.  This is good for beginners.
 
-2. `dhall` (coming soon)
+2. [`dhall`](./2022-12-20-building-dhall-with-stacklock2nix)
+
+    This post introduces an advanced way to build a Haskell project with
+    multiple packages.  This is good for developers who need ultimate
+    flexibility.
 
 3. `spago` (coming soon)
 
@@ -43,4 +48,7 @@ various Haskell projects.  Check out each one for a realistic example of using
 
 [^1]: haskell.nix of course has a bunch of
     [good points](https://github.com/cdepillabout/stacklock2nix#stacklock2nix-vs-haskellnix) as well.
+
+[^2]: As opposed to manually keeping dependency versions in sync between
+    `stack.yaml` and your Nix code.
 
