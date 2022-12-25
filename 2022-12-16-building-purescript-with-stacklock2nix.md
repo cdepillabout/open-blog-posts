@@ -6,15 +6,13 @@ draft: false
 ------------------------------------------------------
 
 *This is the first post in a
-[series about `stacklock2nix`](./2022-12-15-stacklock2nix).*
+[series about `stacklock2nix`](./2022-12-15-stacklock2nix).
 The next post is about
-[building Dhall with `stacklock2nix`](./2022-12-20-building-dhall-with-stacklock2nix).
-
-<!-- The next post is about
-[who would find PureNix easy to use](./2022-01-05-who-would-like-purenix). -->
+[building Dhall with `stacklock2nix`](./2022-12-20-building-dhall-with-stacklock2nix).*
 
 This post uses [`stacklock2nix`](https://github.com/cdepillabout/stacklock2nix)
-to build the PureScript compiler with Nix. PureScript is a non-trivial Haskell
+to build the [PureScript compiler](https://github.com/purescript/purescript)
+with Nix. PureScript is a non-trivial Haskell
 project, but it is not _too_ complicated. It is good as an initial example of
 using `stacklock2nix`.
 

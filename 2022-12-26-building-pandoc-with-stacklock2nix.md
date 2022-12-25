@@ -1,21 +1,20 @@
 ------------------------------------------------------
-title: Building Dhall with stacklock2nix
-summary: Use stacklock2nix to build Dhall
+title: Building Spago with stacklock2nix
+summary: Use stacklock2nix to build Spago while statically linking
 tags: nixos, haskell
 draft: false
 ------------------------------------------------------
 
-*This is the second post in a
+*This is the third and final post in a
 [series about `stacklock2nix`](./2022-12-15-stacklock2nix).
 The previous post is about
-[building PureScript with `stacklock2nix`](./2022-12-16-building-purescript-with-stacklock2nix).
-The next post is about
-[building Spago with `stacklock2nix`](./2022-12-24-building-spago-with-stacklock2nix).*
+[building Dhall with `stacklock2nix`](./2022-12-20-building-dhall-with-stacklock2nix).*
 
 This post uses [`stacklock2nix`](https://github.com/cdepillabout/stacklock2nix)
-to build [Dhall](https://github.com/dhall-lang/dhall-haskell) and all its
-tools with Nix. The Dhall project is a good example for `stacklock2nix`, since
-it is comprised of quite a few different Haskell packages.
+to build [Spago](https://github.com/purescript/spago) with Nix. Spago is a
+popular build tool for PureScript.
+example for `stacklock2nix`, since it is comprised of quite a few different
+Haskell packages.
 
 The following commit adds some Nix code to the Dhall repo that can be used to
 build with Nix[^1]:
