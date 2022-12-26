@@ -21,8 +21,7 @@ on any Linux distribution.
 The following commit adds a `flake.nix` to the Pandoc repo that can be used to
 build with Nix and statically-link:
 
-<!-- TODO: -->
-<https://github.com/cdepillabout/pandoc/commit/>
+<https://github.com/cdepillabout/pandoc/commit/ae4d9ffd7f8fd593fe6caa980c33fccecd187539>
 
 This `flake.nix` is based on the
 [easy example](https://github.com/cdepillabout/stacklock2nix/tree/main/my-example-haskell-lib-easy)
@@ -56,34 +55,39 @@ result/bin/pandoc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statical
 
 You can see that it says "statically linked".
 
+We can try running the `pandoc` binary on our own system just to confirm it works:
 
 ```console
-$ docker run -it -v `pwd`/result:/pandoc ubuntu /pandoc/bin/pandoc --version
-pandoc 3.0
+$ ./result/bin/pandoc --to=plain ./README.md
+...
 ```
+
+Here we're using Pandoc to convert the `README.md` file to a plain-text format.
+
+Now, we can run the same binary in an Ubuntu Docker container and
+prove that it does actually work on another Linux distribution:
+
+
+```console
+$ docker run -it \
+    -v `pwd`/result/bin/pandoc:/pandoc \
+    -v `pwd`/README.md:/README.md \
+    ubuntu \
+    /pandoc --to=plain /README.md
+...
+```
+
+Great!  You can see that it outputs the same thing as when we ran it locally.
+This is proof that our statically-linked `pandoc` binary is able to run
+both on the system it is built on, and on any other arbitrary Linux system.
+This is exactly what we were going for.
 
 ## Conclusion
 
-Dhall is a non-trivial, multi-package Haskell project.  Building
-it with `stacklock2nix` is relatively straight-forward.  A few Nix overrides are
-necessary for getting everything to build.  As long as you have a `stack.yaml`
-and `stack.yaml.lock` file, `stacklock2nix` makes it easy to build a Haskell
-project with Nix.  Even a large, multi-package Haskell project.
+`stacklock2nix` can be an easy way to get your Stack-based project to compile
+with Nix.  It reuses the Nixpkgs infrastructure, so even things like static-linking
+are possible.
 
-The Haskell dependency versions are controlled by the `stack.yaml` file.
-Bumping the Stackage resolver in `stack.yaml` is all that is needed to build
-with newer Haskell dependencies.  This is much easier than manually keeping
-dependencies in sync between Haskell and Nix.
-
-## Footnotes
-
-[^1]: Dhall actually already has a nice infrastructure for building with Nix.
-    In practice, this existing infrastructure should be used instead of
-    `stacklock2nix`.  The commit from this blog post is  purely to show how
-    `stacklock2nix` could be used on a non-trivial Haskell project.  (There is
-    also a parent commit that deletes all the existing Nix infrastructure in
-    the Dhall repo, just to make everything a little easier to understand.)
-
-[^2]: Note that `stack` internally runs `nix-shell`, so you can run `stack`
-    outside of `nix-shell`.  That is to say, you don't have to be inside
-    `nix-shell` before you run any of the `stack` commands.
+If you've read through this series and have any problems with stacklock2nix,
+feel free to [create an issue](https://github.com/cdepillabout/stacklock2nix/issues)
+or [send a PR](https://github.com/cdepillabout/stacklock2nix/pulls).

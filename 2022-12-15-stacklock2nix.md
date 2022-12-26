@@ -30,23 +30,23 @@ I've decided to do a series of blog posts where I use `stacklock2nix` to package
 various Haskell projects.  Check out each one for a realistic example of using
 `stacklock2nix`:
 
-1. [`purescript`](./2022-12-16-building-purescript-with-stacklock2nix)
+1. [PureScript](./2022-12-16-building-purescript-with-stacklock2nix)
 
     This post introduces an easy way to build a straight-forward Haskell
     project with `stacklock2nix`.  This is good for beginners.
 
-2. [`dhall`](./2022-12-20-building-dhall-with-stacklock2nix)
+2. [Dhall](./2022-12-20-building-dhall-with-stacklock2nix)
 
     This post introduces an advanced way to build a Haskell project with
     multiple packages.  This is good for developers who need ultimate
     flexibility.
 
-3. [`pandoc`](./2022-12-26-building-pandoc-with-stacklock2nix)
+3. [Pandoc](./2022-12-26-building-pandoc-with-stacklock2nix)
 
-    This post is similar to the post about `purescript`, but it sets up
-    pandoc to be statically linked.  This would be a good example to
-    follow for people that want to distribute fully statically-linked
-    Haskell binaries.
+    This post is similar to the post about building the PureScript compiler,
+    but it sets up Pandoc to be statically linked.  This would be a good
+    example to follow for people that want to distribute fully
+    statically-linked Haskell binaries.
 
 ## Footnotes
 
