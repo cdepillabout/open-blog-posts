@@ -1,6 +1,6 @@
 ------------------------------------------------------
-title: Building Spago with stacklock2nix
-summary: Use stacklock2nix to build Spago while statically linking
+title: Building Pandoc with stacklock2nix
+summary: Use stacklock2nix to build a fully statically-linked Pandoc
 tags: nixos, haskell
 draft: false
 ------------------------------------------------------
@@ -11,94 +11,55 @@ The previous post is about
 [building Dhall with `stacklock2nix`](./2022-12-20-building-dhall-with-stacklock2nix).*
 
 This post uses [`stacklock2nix`](https://github.com/cdepillabout/stacklock2nix)
-to build [Spago](https://github.com/purescript/spago) with Nix. Spago is a
-popular build tool for PureScript.
-example for `stacklock2nix`, since it is comprised of quite a few different
-Haskell packages.
+to build [Pandoc](https://github.com/jgm/pandoc) with Nix. Pandoc is a tool for
+converting from one markup format to another.  It is one of the most widely-used
+tools written in Haskell. This post explains how to use `stacklock2nix` to
+build Pandoc, but with a twist that Pandoc will be fully statically-linked.
+This means that you can take the Pandoc binary built with Nix and use it
+on any Linux distribution.
 
-The following commit adds some Nix code to the Dhall repo that can be used to
-build with Nix[^1]:
+The following commit adds a `flake.nix` to the Pandoc repo that can be used to
+build with Nix and statically-link:
 
-<https://github.com/cdepillabout/dhall-haskell/commit/e1a7c31d68ad2da9c748dddcca01668da0ca53d6>
+<!-- TODO: -->
+<https://github.com/cdepillabout/pandoc/commit/>
 
-The most interesting file in this commit is `nix/overlay.nix`.  This is the
-file I recommend taking a look at to get a feel for using `stacklock2nix`.
-This newly-added Nix code is based on the
-[advanced example](https://github.com/cdepillabout/stacklock2nix/tree/main/my-example-haskell-lib-advanced)
-of `stacklock2nix`.  This post explains how to use this newly-added Nix code.
+This `flake.nix` is based on the
+[easy example](https://github.com/cdepillabout/stacklock2nix/tree/main/my-example-haskell-lib-easy)
+of `stacklock2nix`. This post explains how to use this `flake.nix`.
 
-## What can you do with this?
+## What can you do with this `flake.nix`?
 
 First, clone the above repo locally with the following commands:
 
 ```console
-$ git clone git@github.com:cdepillabout/dhall-haskell.git
-$ cd dhall-haskell/
+$ git clone git@github.com:cdepillabout/pandoc.git
+$ cd pandoc/
 $ git checkout build-with-stacklock2nix
-$ git submodule update --init
 ```
 
-From here, you can use the `flake.nix` file to build the Dhall tools:
+This `flake.nix` is very similar to the one added for
+[building PureScript](./2022-12-16-building-purescript-with-stacklock2nix).
+You can run all the same commands, like `nix build`, or `nix develop` and then
+`cabal build all`.
+
+The big difference is that this `flake.nix` for Pandoc is setup to statically-link
+the binaries it produces.  So if you build the binary, you can see that it has
+been statically-linked:
 
 ```console
-$ nix build -L
-```
-
-After building, all the Dhall tools should be available:
-
-```console
-$ ls result/bin/
-csv-to-dhall
-dhall
-dhall-docs
-dhall-lsp-server
-dhall-to-bash
-dhall-to-csv
-dhall-to-json
-dhall-to-nix
+$ nix build
 ...
+$ file result/bin/pandoc
+result/bin/pandoc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, stripped
 ```
 
-You can also use the `default.nix` file with `nix-build`:
+You can see that it says "statically linked".
+
 
 ```console
-$ nix-build
-```
-
-You can use `nix develop` to jump into a development shell that has tools like
-`cabal-install` and HLS available:
-
-```console
-$ nix develop -L
-```
-
-Or you could do the same thing with `nix-shell`:
-
-```console
-$ nix-shell
-```
-
-From here, you can build all the Dhall tools with `cabal`:
-
-```console
-$ cabal build all
-...
-$ cabal run dhall -- --version
-1.41.2
-```
-
-You can also use other normal commands like `cabal test`, `cabal repl`, etc.
-
-The repo is also setup to be able to build with `stack`[^2]:
-
-```console
-$ stack --nix build
-```
-
-And run tests:
-
-```console
-$ stack --nix test
+$ docker run -it -v `pwd`/result:/pandoc ubuntu /pandoc/bin/pandoc --version
+pandoc 3.0
 ```
 
 ## Conclusion

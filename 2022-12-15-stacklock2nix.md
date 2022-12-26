@@ -41,8 +41,12 @@ various Haskell projects.  Check out each one for a realistic example of using
     multiple packages.  This is good for developers who need ultimate
     flexibility.
 
-3. `spago` (coming soon)
+3. [`pandoc`](./2022-12-26-building-pandoc-with-stacklock2nix)
 
+    This post is similar to the post about `purescript`, but it sets up
+    pandoc to be statically linked.  This would be a good example to
+    follow for people that want to distribute fully statically-linked
+    Haskell binaries.
 
 ## Footnotes
 

@@ -10,7 +10,7 @@ draft: false
 The previous post is about
 [building PureScript with `stacklock2nix`](./2022-12-16-building-purescript-with-stacklock2nix).
 The next post is about
-[building Spago with `stacklock2nix`](./2022-12-24-building-spago-with-stacklock2nix).*
+[building Pandoc with `stacklock2nix`](./2022-12-26-building-pandoc-with-stacklock2nix).*
 
 This post uses [`stacklock2nix`](https://github.com/cdepillabout/stacklock2nix)
 to build [Dhall](https://github.com/dhall-lang/dhall-haskell) and all its
