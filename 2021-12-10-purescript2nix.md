@@ -8,6 +8,16 @@ draft: false
 *This post is part of a series called
 [The Road to `purescript2nix`](./2021-12-10-road-to-purescript2nix).*
 
+*Update 2023-02-15: Viktor Kronvall ([@considerate](https://github.com/considerate))
+took `purescript2nix` and fixed it up to be able to use the new
+[PureScript Registry](https://github.com/purescript/registry).  During this process,
+`purescript2nix` has been renamed to [`purifix`](https://github.com/purifix/purifix),
+and moved to its own [GitHub Organization](https://github.com/purifix).
+Links to the `purescript2nix` repo in this blog post should all still work, but
+they will be redirected to the `purifix` repo.  If you're looking for the
+exact code this blog post describes, you should fine it at
+commit [`1e5e98dcd851e31`](https://github.com/purifix/purifix/tree/1e5e98dcd851e31b5eb9e20bd3627b2c330ee7e0).*
+
 [`purescript2nix`](https://github.com/cdepillabout/purescript2nix)
 is a Nix function that allows you to easily build
 a PureScript project with Nix.  It uses the info in your `spago.dhall`
