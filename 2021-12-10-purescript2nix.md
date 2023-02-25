@@ -15,7 +15,7 @@ took `purescript2nix` and fixed it up to be able to use the new
 and moved to its own [GitHub Organization](https://github.com/purifix).
 Links to the `purescript2nix` repo in this blog post should all still work, but
 they will be redirected to the `purifix` repo.  If you're looking for the
-exact code this blog post describes, you should fine it at
+exact code this blog post describes, you should find it at
 commit [`1e5e98dcd851e31`](https://github.com/purifix/purifix/tree/1e5e98dcd851e31b5eb9e20bd3627b2c330ee7e0).*
 
 [`purescript2nix`](https://github.com/cdepillabout/purescript2nix)
